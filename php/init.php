@@ -1,7 +1,7 @@
 <?php 
+//require_once this file in order to acces the local mysql server.
 
 $db = null;
-
 try{
 
     $db = new PDO('mysql:dbname=IMDB_clone;host=localhost','root','password');
@@ -10,8 +10,5 @@ try{
 
     echo 'Connection failed: i'.$e->getMessage();
 
-}
-   
-
-
+}   
 ?>
