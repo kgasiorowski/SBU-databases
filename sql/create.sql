@@ -5,11 +5,12 @@ DROP TABLE IF EXISTS
     credit,
     film,
     personnel,
-    rating,
-    genre;
+    genre,
+    role;
 
 -- Secondary tables first
 -- Create table of ratings. Mostly static
+/*
 CREATE TABLE IF NOT EXISTS rating(
 
     ID INTEGER NOT NULL auto_increment,
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS rating(
     UNIQUE(rating)
 
 );
+
 INSERT INTO rating (rating) 
     VALUES
     ('NYR'), -- Not yet rated
@@ -28,17 +30,18 @@ INSERT INTO rating (rating)
     ('PG-13'),
     ('R'),
     ('NC-17');
-
+*/
 -- Create table of genres. Also mostly static
 CREATE TABLE IF NOT EXISTS genre(
 
     ID INTEGER NOT NULL auto_increment,
     PRIMARY KEY(ID),
 
-    Genre CHAR(20),
+    genre CHAR(20),
     UNIQUE(genre)
 
 );
+
 INSERT INTO genre (genre)
     VALUES
     ('No Genre'),
@@ -55,7 +58,30 @@ INSERT INTO genre (genre)
     ('Science Fiction'),
     ('Romantic Comedy');
 
+-- Create table of film roles. Mostly static
+CREATE TABLE IF NOT EXISTS role(
+
+    ID INTEGER NOT NULL auto_increment,
+    PRIMARY KEY(ID),
+    
+    role CHAR(20),
+    UNIQUE(role)
+
+);
+
+INSERT INTO role (role)
+    VALUES
+    ('Producer'),
+    ('Director'),
+    ('Actor'),
+    ('Screenwriter'),
+    ('Editor'),
+    ('Cinematographer'),
+    ('Musical Composer');
+
 -- Main tables
+
+-- This table holds records for every person to ever work on a film
 CREATE TABLE IF NOT EXISTS personnel(
 
     ID INTEGER NOT NULL auto_increment,
@@ -70,17 +96,18 @@ CREATE TABLE IF NOT EXISTS personnel(
     description VARCHAR(64),
     height SMALLINT,
     
-    UNIQUE(firstname, midname, lastname),
-    UNIQUE(description)
+    UNIQUE(firstname, midname, lastname)
 
 );
+
+-- This table holds all records for every film
 CREATE TABLE IF NOT EXISTS film(
 
     ID INTEGER NOT NULL auto_increment,
     PRIMARY KEY(ID),
 
     title CHAR(30) NOT NULL,
-    rating INTEGER, FOREIGN KEY(rating) REFERENCES rating(ID),   
+    rating CHAR(5) NOT NULL DEFAULT "NYR",
     score FLOAT,
     genre INTEGER, FOREIGN KEY(genre) REFERENCES genre(ID),
     date_released DATE DEFAULT "2000-01-01",
@@ -91,19 +118,66 @@ CREATE TABLE IF NOT EXISTS film(
     unique(title, date_released)
 
 );
+
 DELIMITER $
-CREATE TRIGGER validate_score BEFORE INSERT ON film
+
+-- Create triggers to validate the score of a film
+CREATE TRIGGER validate_score_insert BEFORE INSERT ON film
     FOR EACH ROW
     BEGIN
-        IF NEW.score < 0 OR
-           NEW.score > 10
+        IF  NEW.score < 0 OR
+            NEW.score > 10
         THEN
             SIGNAL sqlstate '45000' SET message_text = 'Invalid score set';
         END IF;
-    END$
+END$
+
+CREATE TRIGGER validate_score_update BEFORE UPDATE ON film
+    FOR EACH ROW
+    BEGIN
+        IF  NEW.score < 0 OR
+            NEW.score > 10
+        THEN
+            SIGNAL sqlstate '45000' SET message_text = 'Invalid score set';
+        END IF;
+END$ 
+
+-- Create triggers to validate the rating of a film
+CREATE TRIGGER validate_rating_insert BEFORE INSERT ON film
+    FOR EACH ROW
+    BEGIN
+        IF  NEW.rating <> NULL AND
+            NEW.rating <> "NYR" AND
+            NEW.rating <> "UR" AND
+            NEW.rating <> "G" AND
+            NEW.rating <> "PG" AND
+            NEW.rating <> "PG-13" AND
+            NEW.rating <> "R" AND
+            NEW.rating <> "NC-17"
+        THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid rating set';
+        END IF;
+END$
+
+CREATE TRIGGER validate_rating_update BEFORE UPDATE ON film        
+    FOR EACH ROW
+    BEGIN
+        IF  NEW.rating <> NULL AND
+            NEW.rating <> "NYR" AND
+            NEW.rating <> "UR" AND
+            NEW.rating <> "G" AND
+            NEW.rating <> "PG" AND
+            NEW.rating <> "PG-13" AND
+            NEW.rating <> "R" AND
+            NEW.rating <> "NC-17"
+        THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid rating set';
+        END IF;
+END$
+
 DELIMITER ;
 
--- Junction table
+-- Junction table. Enables many-to-many relationships to be easily organized
 CREATE TABLE IF NOT EXISTS credit(
 
     ID INTEGER NOT NULL auto_increment, 
@@ -115,18 +189,7 @@ CREATE TABLE IF NOT EXISTS credit(
     film_ID INTEGER NOT NULL,
     FOREIGN KEY(film_ID) REFERENCES film(ID),
 
-    credit_type CHAR(30) NOT NULL 
+    role_ID INTEGER NOT NULL,
+    FOREIGN KEY(role_ID) REFERENCES role(ID)
 
 );
-DELIMITER $
-CREATE TRIGGER validate_credit_type BEFORE INSERT ON credit
-    FOR EACH ROW
-    BEGIN
-        IF  NEW.credit_type <> 'Acting' AND 
-            NEW.credit_type <> 'Directing' AND 
-            NEW.credit_type <> 'Producing'
-        THEN 
-            SIGNAL sqlstate '45000' SET message_text = 'Bad credit type';
-        END IF;
-    END$
-DELIMITER ;
