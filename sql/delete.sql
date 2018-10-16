@@ -1,5 +1,3 @@
-USE IMDB_clone;
-
 -- Delete everything
 DROP TABLE IF EXISTS 
     credit,
