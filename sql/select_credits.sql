@@ -1,5 +1,3 @@
-use IMDB_clone;
-
 SELECT 
     credit.ID, 
     personnel.firstname,
@@ -15,3 +13,7 @@ SELECT
 FROM credit
     INNER JOIN personnel ON credit.personnel_ID = personnel.ID
     INNER JOIN film ON credit.film_ID = film.ID
+
+ORDER BY
+    credit.ID
+;
