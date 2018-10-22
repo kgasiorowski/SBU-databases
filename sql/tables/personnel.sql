@@ -1,4 +1,12 @@
--- This table holds records for every person to ever work on a film
+/*
+
+This table represents a film personnel, in other words, a person that works on films in some form.
+
+The table has several fields which describe any human person (name, birthdate, height).
+
+The tale also has two triggers that validate the person's gender on INSERTs and UPDATEs, respectively.
+
+*/
 CREATE TABLE IF NOT EXISTS personnel(
 
     ID INTEGER NOT NULL auto_increment,
@@ -11,10 +19,8 @@ CREATE TABLE IF NOT EXISTS personnel(
     gender CHAR(1),
     birthdate DATE,
     description VARCHAR(64),
-    height SMALLINT,
+    height SMALLINT
    
-    UNIQUE(firstname, midname, lastname)
-
 );
 
 DELIMITER $

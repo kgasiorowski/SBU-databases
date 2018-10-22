@@ -1,4 +1,12 @@
--- This table holds all records for every film
+/*
+
+This table represents a film.
+
+It has several fields 
+
+
+*/
+
 CREATE TABLE IF NOT EXISTS film(
 
     ID INTEGER NOT NULL auto_increment,

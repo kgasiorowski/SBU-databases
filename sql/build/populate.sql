@@ -1,3 +1,9 @@
+/*
+
+This script inserts a bunch of sample data into the database.
+
+*/
+
 -- Clear everything
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE credit;
