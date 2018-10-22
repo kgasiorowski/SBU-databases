@@ -9,6 +9,7 @@ foreign key errors.
 -- Delete everything
 DROP TABLE IF EXISTS 
     credit,
+    edit,
     article,
     film,
     personnel,

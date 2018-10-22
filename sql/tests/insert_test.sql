@@ -1,3 +1,11 @@
+/*
+
+This script checks that all triggers function in all the tables. 
+First it clears all the data and attempts to insert invalid values.
+All of the queries should fail.
+
+*/
+
 -- Clear everything
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE credit;

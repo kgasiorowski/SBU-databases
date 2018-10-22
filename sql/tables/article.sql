@@ -10,8 +10,6 @@ The original author's ID is saved in original_author_id.
 
 The article's title and boy content are saved below that.
 
-TODO- Add trigger to prevent change of original_author_id
-
 */
 CREATE TABLE IF NOT EXISTS article(
 

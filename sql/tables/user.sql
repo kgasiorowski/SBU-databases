@@ -4,6 +4,9 @@ This table represents a user which can log in to the system to edit or create ar
 
 Each user has a username stored as a string, and each user's username is unique.
 
+NOTE: Passwords should NEVER be stored as plaintext in a database. Usually you would create a
+hash and store that instead, but since that's not the focus of this assignment, the passwords
+will be stored as plaintext.
 
 */
 CREATE TABLE IF NOT EXISTS user(
@@ -11,9 +14,14 @@ CREATE TABLE IF NOT EXISTS user(
     ID INTEGER NOT NULL auto_increment, PRIMARY KEY(ID),
     
     username VARCHAR(20) NOT NULL,
-    password BINARY(16) NOT NULL,
+    password VARCHAR(20) NOT NULL,
 
-    unique(username)
+    firstName VARCHAR(10),
+    lastName VARCHAR(10),
+
+    email VARCHAR(15),
+
+    UNIQUE(username)
     
 
 );

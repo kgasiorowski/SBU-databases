@@ -21,3 +21,5 @@ source ../tables/credit.sql;
 source ../tables/user.sql;
 source ../tables/admin.sql;
 source ../tables/article.sql;
+source ../tables/edit.sql
+

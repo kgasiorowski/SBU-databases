@@ -1,3 +1,11 @@
+/*
+
+This script checks that all "update" triggers function in all tables.
+First it clears all the tables, inserts valid info, and tries to update
+it to invalid data. All of these queries should fail. 
+ 
+*/
+
 -- Clear everything
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE credit;
