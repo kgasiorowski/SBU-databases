@@ -7,23 +7,25 @@ re-creates the tables one by one.
 */
 
 -- Delete everything
-source delete.sql;
+source build/delete.sql;
 
 -- Main tables
-source ../tables/personnel.sql;
-source ../tables/film.sql;
+source tables/personnel.sql;
+source tables/film.sql;
 
 -- Junction table to create an interface between film + personnel
-source ../tables/credit.sql;
+source tables/credit.sql;
 
 
 -- Now administrative tables
-source ../tables/user.sql;
-source ../tables/admin.sql;
-source ../tables/article.sql;
-source ../tables/edit.sql
+source tables/user.sql;
+source tables/admin.sql;
+source tables/article.sql;
+source tables/edit.sql;
 
-
+-- Now add test data to the tables
+source build/populate.sql;
 
 -- Now create the procedures
-source procs.sql;
+source build/procs.sql;
+

@@ -16,8 +16,8 @@ BEGIN
         film.genre,
         credit.role
     FROM credit
-    INNER JOIN personnel ON credit.personnel_ID = personnel.ID
-    INNER JOIN film ON credit.film_ID = film.ID
+    INNER JOIN personnel ON credit.personnelID = personnel.ID
+    INNER JOIN film ON credit.filmID = film.ID
     ORDER BY credit.ID;
 END$
 

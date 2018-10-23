@@ -11,19 +11,23 @@ TRUNCATE TABLE personnel;
 TRUNCATE TABLE film;
 TRUNCATE TABLE user;
 TRUNCATE TABLE admin;
+TRUNCATE TABLE article;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add some values to film
-source populate/populate_film.sql;
+source build/populate/populate_film.sql;
 
 -- Add some values to personnel
-source populate/populate_personnel.sql;
+source build/populate/populate_personnel.sql;
 
 -- Add some credits, linking the two tables together
-source populate/populate_credit.sql;
+source build/populate/populate_credit.sql;
 
 -- Add some users
-source populate/populate_user.sql;
+source build/populate/populate_user.sql;
 
 -- Create some admin accounts
-source populate/populate_admin.sql;
+source build/populate/populate_admin.sql;
+
+-- Create some articles
+source build/populate/populate_article.sql;

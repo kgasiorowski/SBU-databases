@@ -32,7 +32,7 @@ INSERT INTO personnel (firstname, lastname, gender, birthdate) VALUES
 ;
 
 -- Add some credits, linking the two tables together
-INSERT INTO credit (personnel_ID, film_ID, role) VALUES
+INSERT INTO credit (personnelID, filmID, role) VALUES
 (
     (SELECT ID FROM personnel WHERE firstname="Tom"), 
     (SELECT ID FROM film WHERE title="Apollo 13"), 

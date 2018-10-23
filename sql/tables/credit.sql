@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS credit(
     ID INTEGER NOT NULL auto_increment, 
     PRIMARY KEY(ID),
 
-    personnel_ID INTEGER NOT NULL, 
-    FOREIGN KEY(personnel_ID) REFERENCES personnel(ID),
+    personnelID INTEGER NOT NULL, 
+    FOREIGN KEY(personnelID) REFERENCES personnel(ID),
 
-    film_ID INTEGER NOT NULL,
-    FOREIGN KEY(film_ID) REFERENCES film(ID),
+    filmID INTEGER NOT NULL,
+    FOREIGN KEY(filmID) REFERENCES film(ID),
 
     role char(30) NOT NULL DEFAULT "Actor"
 
