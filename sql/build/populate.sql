@@ -24,3 +24,6 @@ source populate/populate_credit.sql;
 
 -- Add some users
 source populate/populate_user.sql;
+
+-- Create some admin accounts
+source populate/populate_admin.sql;

@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS user(
     firstName VARCHAR(10),
     lastName VARCHAR(10),
 
-    email VARCHAR(15),
+    email VARCHAR(30),
 
     UNIQUE(username)
     

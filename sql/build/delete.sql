@@ -18,3 +18,7 @@ DROP TABLE IF EXISTS
     role,
     admin,
     user;
+
+
+DROP PROCEDURE IF EXISTS `select_credits`;
+DROP PROCEDURE IF EXISTS `select_admin`;

@@ -23,3 +23,7 @@ source ../tables/admin.sql;
 source ../tables/article.sql;
 source ../tables/edit.sql
 
+
+
+-- Now create the procedures
+source procs.sql;
