@@ -22,3 +22,5 @@ DROP TABLE IF EXISTS
 
 DROP PROCEDURE IF EXISTS `select_credits`;
 DROP PROCEDURE IF EXISTS `select_admin`;
+DROP PROCEDURE IF EXISTS `select_film_article`;
+DROP PROCEDURE IF EXISTS `select_personnel_article`;

@@ -25,11 +25,39 @@ CREATE TABLE IF NOT EXISTS edit (
     new_body VARCHAR(256) NOT NULL,
     
     -- Which user submitted the edit
-    user_ID INTEGER NOT NULL,
-    FOREIGN KEY(user_ID) REFERENCES user(ID),
+    userID INTEGER NOT NULL,
+    FOREIGN KEY(userID) REFERENCES user(ID),
 
     -- Which admin approved it
     approved_by_admin_ID INTEGER DEFAULT NULL,    
     FOREIGN KEY(approved_by_admin_ID) REFERENCES admin(ID)
 
 );
+
+DELIMITER $
+
+CREATE TRIGGER validate_approved_insert BEFORE INSERT ON edit
+    FOR EACH ROW
+    BEGIN
+        IF 
+           (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL) 
+           OR
+           (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
+        THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Edit must have approval date when approved';
+        END IF;
+END$
+            
+CREATE TRIGGER validate_approved_update BEFORE UPDATE ON edit
+    FOR EACH ROW
+    BEGIN
+        IF 
+           (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL)
+           OR
+           (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
+        THEN
+            SIGNAL SQLSTATE '45000' SET message_text = 'Edit must have approval date when approved';
+        END IF;
+END$
+
+DELIMITER ;

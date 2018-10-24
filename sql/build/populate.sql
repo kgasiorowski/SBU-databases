@@ -31,3 +31,6 @@ source populate/populate_admin.sql;
 
 -- Create some articles
 source populate/populate_article.sql;
+
+-- Create some article edits
+source populate/populate_edit.sql;
