@@ -15,19 +15,19 @@ TRUNCATE TABLE article;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add some values to film
-source build/populate/populate_film.sql;
+source populate/populate_film.sql;
 
 -- Add some values to personnel
-source build/populate/populate_personnel.sql;
+source populate/populate_personnel.sql;
 
 -- Add some credits, linking the two tables together
-source build/populate/populate_credit.sql;
+source populate/populate_credit.sql;
 
 -- Add some users
-source build/populate/populate_user.sql;
+source populate/populate_user.sql;
 
 -- Create some admin accounts
-source build/populate/populate_admin.sql;
+source populate/populate_admin.sql;
 
 -- Create some articles
-source build/populate/populate_article.sql;
+source populate/populate_article.sql;

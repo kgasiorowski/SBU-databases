@@ -39,3 +39,15 @@ INSERT INTO credit (personnelID, filmID, role) VALUES
     "Acor"
 
 );
+
+INSERT INTO article(filmID, personnelID, isFilm, original_author_id, title, body) VALUES
+(1, 2, TRUE, 1, "Inception", "Sample text for inception article");
+
+INSERT INTO article(filmID, personnelID, isFilm, original_author_id, title, body) VALUES
+(NULL, NULL, FALSE, 1, "Leonardo DiCaprio", "Sample text for Leo article");
+
+INSERT INTO article(filmID, personnelID, isFilm, original_author_id, title, body) VALUES
+(1, NULL, FALSE, 1, "Leonardo DiCaprio", "Sample text for Leo article");
+
+INSERT INTO article(filmID, personnelID, isFilm, original_author_id, title, body) VALUES
+(NULL, 1, TRUE, 1, "Leonardo DiCaprio", "Sample text for Leo article");

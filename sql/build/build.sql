@@ -7,7 +7,7 @@ re-creates the tables one by one.
 */
 
 -- Delete everything
-source build/delete.sql;
+source delete.sql;
 
 -- Main tables
 source tables/personnel.sql;
@@ -24,8 +24,8 @@ source tables/article.sql;
 source tables/edit.sql;
 
 -- Now add test data to the tables
-source build/populate.sql;
+source populate.sql;
 
 -- Now create the procedures
-source build/procs.sql;
+source procs.sql;
 

@@ -1,6 +1,6 @@
 DELIMITER $
 
-DROP PROCEDURE IF EXISTS `select_credits`$
+DROP PROCEDURE IF EXISTS `select_credit`$
 CREATE PROCEDURE `select_credits`()
 DETERMINISTIC
 BEGIN
@@ -31,5 +31,34 @@ BEGIN
     ON user.ID = userID;
 END$
 
-DELIMITER ;
+DROP PROCEDURE IF EXISTS `select_film_article`$
+CREATE PROCEDURE `select_film_article`()
+DETERMINISTIC
+BEGIN
+    SELECT
+        article.ID,
+        film.ID,
+        original_author_id,
+        article.title, 
+        body
+    FROM article
+    INNER JOIN film
+    ON film.ID = article.filmID;
+END$
 
+DROP PROCEDURE IF EXISTS `select_personnel_article`$
+CREATE PROCEDURE `select_personnel_article`()
+DETERMINISTIC
+BEGIN
+    SELECT 
+        article.ID,
+        personnel.ID,
+        original_author_id,
+        article.title,
+        body
+    FROM article
+    INNER JOIN personnel
+    ON article.personnelID = personnel.ID;
+END$
+
+DELIMITER ;
