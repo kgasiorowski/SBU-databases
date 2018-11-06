@@ -4,7 +4,7 @@
 $db = null;
 try{
 
-    $db = new PDO('mysql:dbname=imdb;host=localhost','root','password');
+    $db = new PDO('mysql:dbname=imdbc;host=localhost','root','root');
 
 }catch(PDOException $e){
 
