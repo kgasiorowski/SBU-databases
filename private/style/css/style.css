@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Kelly+Slab');
+@font-face{
+
+	font-family: eveFont;
+	src: url(../fonts/eve.ttf);
+
+}
+
+body {
+	
+	background-color:#232a35;	
+	color:#d6d6d6;
+	/*font-family: 'Kelly Slab', cursive;*/
+	
+}
+
+table {
+	
+	border: 1px solid white;
+	border-collapse: collapse;
+	/*background-color: #435268;*/
+	
+}
+
+td {
+	
+	border: 1px solid white;
+	padding: 5px;
+	background-color: #435268;
+	
+}
