@@ -61,7 +61,9 @@ DROP VIEW IF EXISTS articlev;
 CREATE VIEW articlev AS
 SELECT 
 	article.ID AS articleID, 
-	isFilm, 
+	isFilm,
+	filmID,
+	personnelID,
 	user.username AS author, 
 	CONCAT(user.firstname, " ", user.lastname) AS fullname, 
 	title, 

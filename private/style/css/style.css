@@ -29,3 +29,11 @@ td {
 	background-color: #435268;
 	
 }
+
+a {
+	color: white;
+}
+
+a:visited {
+	color: white;
+}
