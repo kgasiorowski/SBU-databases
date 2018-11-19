@@ -11,6 +11,7 @@ source delete.sql;
 
 source tables/gender.sql;
 source tables/genre.sql;
+source tables/rating.sql;
 
 -- Main tables
 source tables/personnel.sql;

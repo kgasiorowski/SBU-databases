@@ -19,7 +19,13 @@ DROP TABLE IF EXISTS
     admin,
     user,
     gender;
-
+	
+DROP VIEW IF EXISTS
+	personnelv,
+	creditv,
+	filmv,
+	adminv,
+	articlev;
 
 DROP PROCEDURE IF EXISTS `select_credits`;
 DROP PROCEDURE IF EXISTS `select_admin`;

@@ -14,11 +14,13 @@ TRUNCATE TABLE admin;
 TRUNCATE TABLE article;
 TRUNCATE TABLE gender;
 TRUNCATE TABLE genre;
+TRUNCATE TABLE rating;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add some values to our side tables
-source populate/populate_gender.sql
-source populate/populate_genre.sql
+source populate/populate_gender.sql;
+source populate/populate_genre.sql;
+source populate/populate_rating.sql;
 
 -- Add some values to film
 source populate/populate_film.sql;

@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS credits;
-CREATE VIEW credits AS 
+DROP VIEW IF EXISTS creditv;
+CREATE VIEW creditv AS 
 SELECT
     credit.ID as creditID,
     personnel.ID as personnelID,
@@ -18,8 +18,8 @@ INNER JOIN film ON credit.filmID = film.ID
 INNER JOIN gender ON gender.ID = personnel.gender
 ORDER BY credit.ID;
 
-DROP VIEW IF EXISTS admins;
-CREATE VIEW admins AS
+DROP VIEW IF EXISTS adminv;
+CREATE VIEW adminv AS
 SELECT
     userID,
     firstName,
@@ -28,8 +28,8 @@ SELECT
 FROM admin
 INNER JOIN user ON user.ID = userID;
 
-DROP VIEW IF EXISTS film_personnel;
-CREATE VIEW film_personnel AS
+DROP VIEW IF EXISTS personnelv;
+CREATE VIEW personnelv AS
 SELECT
     personnel.ID,
     CONCAT(personnel.firstname, " ", personnel.lastname) AS name,
@@ -41,12 +41,12 @@ FROM personnel
 INNER JOIN gender ON gender.ID = personnel.gender
 ORDER BY personnel.ID;
 
-DROP VIEW IF EXISTS films;
-CREATE VIEW films AS
+DROP VIEW IF EXISTS filmv;
+CREATE VIEW filmv AS
 SELECT
-    film.ID as filmID,
+    film.ID as ID,
     film.title,
-    film.rating,
+    rating.rating,
     film.score,
     genre.genre,
     film.date_released,
@@ -54,43 +54,19 @@ SELECT
     film.language,
     film.description
 FROM film
-INNER JOIN genre ON genre.ID = film.genre;
+INNER JOIN genre ON genre.ID = film.genre
+INNER JOIN rating ON rating.ID = film.rating;
 
-DROP VIEW IF EXISTS articles;
-CREATE VIEW articles AS
-(
+DROP VIEW IF EXISTS articlev;
+CREATE VIEW articlev AS
 SELECT 
-    article.ID AS articleID, 
-    article.isFilm,
-    user.username AS author,
-    CONCAT(user.firstname, ' ', user.lastname) AS fullname, 
-    article.title AS articletitle, 
-    article.body AS articlebody 
+	article.ID AS articleID, 
+	isFilm, 
+	user.username AS author, 
+	CONCAT(user.firstname, " ", user.lastname) AS fullname, 
+	title, 
+	body 
 FROM 
-    article 
-INNER JOIN
-    user ON user.ID = original_author_id
+	article 
 INNER JOIN 
-    personnel on personnel.id = personnelID
-) UNION (
-SELECT 
-    article.ID AS articleID,
-    article.isFilm, 
-    user.username AS author,
-    CONCAT(user.firstname, ' ', user.lastname) AS fullname, 
-    article.title AS articletitle, 
-    article.body AS articlebody 
-FROM 
-    article 
-INNER JOIN
-    user ON user.ID = original_author_id
-INNER JOIN 
-    film ON film.ID = filmID
-);
-
-
-
-
-
-
-
+	user ON user.ID = original_author_id;
