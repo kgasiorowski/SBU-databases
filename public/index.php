@@ -26,14 +26,20 @@
 			$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
 			$searchText = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;
 			
-			$query = 'SELECT * FROM articles WHERE ';
+			$query = 'SELECT * FROM articlev WHERE ';
 				
 			if($filter == 'personnel')
 				$query .= 'isFilm = 0 AND ';
 			else if($filter == 'films')
 				$query .= 'isFilm = 1 AND ';
 			
-			$query .= 'articlebody LIKE \'%'.$searchText.'%\';';
+			$query .= 'body LIKE \'%'.$searchText.'%\';';
+			
+			/*
+			br();
+			echo $query;
+			br();
+			*/
 			
 			$results = $db->query($query);
 
@@ -46,7 +52,7 @@
 			while($row = $results->fetch(PDO::FETCH_ASSOC)){
 				
 				echo '<tr>';
-				echo "<td>$row[articleID]</td><td>$row[articletitle]</td><td>$row[articlebody]</td><td>$row[author]</td><td>$row[fullname]</td>";
+				echo "<td>$row[articleID]</td><td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td>";
 				echo '</tr>';
 				
 			}
