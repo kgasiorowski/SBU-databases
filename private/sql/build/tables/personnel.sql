@@ -16,13 +16,15 @@ CREATE TABLE IF NOT EXISTS personnel(
     midname CHAR(20),
     lastname CHAR(20) NOT NULL,
 
-    gender CHAR(1),
+    gender INTEGER NOT NULL,
+    FOREIGN KEY(gender) REFERENCES gender(ID), 
+
     birthdate DATE,
     description VARCHAR(64),
     height SMALLINT
    
 );
-
+/*
 DELIMITER $
 
 CREATE TRIGGER validate_gender_insert BEFORE INSERT ON personnel
@@ -48,3 +50,4 @@ CREATE TRIGGER validate_gender_update BEFORE UPDATE ON personnel
 END$
 
 DELIMITER ;
+*/

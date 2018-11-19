@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS film(
     title CHAR(30) NOT NULL,
     rating CHAR(5) NOT NULL DEFAULT "NYR",
     score FLOAT,
-    genre CHAR(20),
+    genre INTEGER, FOREIGN KEY(genre) REFERENCES genre(ID),
     date_released DATE NOT NULL DEFAULT "2000-01-01",
     duration_in_minutes FLOAT NOT NULL DEFAULT 120,
     language CHAR(20),
@@ -50,7 +50,7 @@ CREATE TRIGGER validate_score_update BEFORE UPDATE ON film
 END$ 
 
 -- Create triggers to validate film genre --
-CREATE TRIGGER validate_film_genre_insert BEFORE INSERT ON film
+/*CREATE TRIGGER validate_film_genre_insert BEFORE INSERT ON film
     FOR EACH ROW
     BEGIN
         IF  NEW.genre <> "No genre" AND
@@ -91,7 +91,7 @@ CREATE TRIGGER validate_film_genre_update BEFORE UPDATE ON film
             SIGNAL SQLSTATE '45000' SET message_text = 'Invalid genre set';
         END IF;
 END$            
-
+*/
 -- Create triggers to validate the rating of a film
 CREATE TRIGGER validate_rating_insert BEFORE INSERT ON film
     FOR EACH ROW

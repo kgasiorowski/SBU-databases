@@ -17,7 +17,8 @@ DROP TABLE IF EXISTS
     genre,
     role,
     admin,
-    user;
+    user,
+    gender;
 
 
 DROP PROCEDURE IF EXISTS `select_credits`;

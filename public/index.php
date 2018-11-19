@@ -26,63 +26,14 @@
 			$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
 			$searchText = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;
 			
-			$filmQuery = '
-			
-			SELECT 
-				article.ID AS articleID, 
-				user.username AS author,
-				CONCAT(user.firstname, \' \', user.lastname) AS fullname, 
-				article.title AS articletitle, 
-				article.body AS articlebody 
-			FROM 
-				article 
-			INNER JOIN
-				user ON user.ID = original_author_id
-			INNER JOIN 
-				film ON film.ID = filmID
-			WHERE 
-				article.title LIKE "%'.$searchText.'%" 
-				OR 
-				article.body LIKE "%'.$searchText.'%" 
-						
-			';
-			
-			$personnelQuery = '
-			
-			SELECT 
-				article.ID AS articleID, 
-				user.username AS author,
-				CONCAT(user.firstname, \' \', user.lastname) AS fullname, 
-				article.title AS articletitle, 
-				article.body AS articlebody 
-			FROM 
-				article 
-			INNER JOIN
-				user ON user.ID = original_author_id
-			INNER JOIN 
-				personnel on personnel.id = personnelID
-			WHERE 
-				article.title LIKE "%'.$searchText.'%" 
-				OR 
-				article.body LIKE "%'.$searchText.'%"
-			';
-			
-			$query = '';
-			
-			if($filter == 'both')
-				$query .= '(' . $filmQuery . ') UNION (' . $personnelQuery . ')';	
-			else if($filter == 'personnel')
-				$query .= $personnelQuery;
+			$query = 'SELECT * FROM articles WHERE ';
+				
+			if($filter == 'personnel')
+				$query .= 'isFilm = 0 AND ';
 			else if($filter == 'films')
-				$query = $filmQuery;
+				$query .= 'isFilm = 1 AND ';
 			
-			$query .= ';';
-			
-			/*
-			br();
-			echo $query;
-			br();
-			*/
+			$query .= 'articlebody LIKE \'%'.$searchText.'%\';';
 			
 			$results = $db->query($query);
 

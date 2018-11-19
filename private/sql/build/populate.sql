@@ -12,7 +12,13 @@ TRUNCATE TABLE film;
 TRUNCATE TABLE user;
 TRUNCATE TABLE admin;
 TRUNCATE TABLE article;
+TRUNCATE TABLE gender;
+TRUNCATE TABLE genre;
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- Add some values to our side tables
+source populate/populate_gender.sql
+source populate/populate_genre.sql
 
 -- Add some values to film
 source populate/populate_film.sql;
