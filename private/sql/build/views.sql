@@ -13,24 +13,24 @@
 
 */
 
-
 DROP VIEW IF EXISTS creditv;
 CREATE VIEW creditv AS 
 SELECT
-    credit.ID as creditID,
+	credit.ID as creditID,
     personnel.ID as personnelID,
+	film.ID as filmID,
     CONCAT(personnel.firstname, " ", personnel.lastname) as name,
     personnel.gender,
     personnel.birthdate,
-    film.ID as filmID,
     film.title,
     film.rating,
     film.score,
     film.genre,
-    credit.role
+    role.role
 FROM credit
 INNER JOIN personnel ON credit.personnelID = personnel.ID
 INNER JOIN film ON credit.filmID = film.ID
+INNER JOIN role ON credit.roleID = role.ID
 ORDER BY credit.ID;
 
 DROP VIEW IF EXISTS adminv;
@@ -83,7 +83,8 @@ SELECT
 	user.username AS author, 
 	CONCAT(user.firstname, " ", user.lastname) AS fullname, 
 	title, 
-	body 
+	body,
+	imageName
 FROM 
 	article 
 INNER JOIN 

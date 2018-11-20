@@ -16,37 +16,10 @@ CREATE TABLE IF NOT EXISTS personnel(
     midname CHAR(20),
     lastname CHAR(20) NOT NULL,
 
-    gender ENUM("M", "F", "Z") NOT NULL DEFAULT "M",
+    gender ENUM("M", "F", "Z") NOT NULL,
 
     birthdate DATE,
     description VARCHAR(64),
     height SMALLINT
    
 );
-/*
-DELIMITER $
-
-CREATE TRIGGER validate_gender_insert BEFORE INSERT ON personnel
-    FOR EACH ROW
-    BEGIN
-        IF  NEW.gender <> "M" AND
-            NEW.gender <> "F" AND
-            NEW.gender <> "Z"
-        THEN
-            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid gender set';
-        END IF;
-END$
-
-CREATE TRIGGER validate_gender_update BEFORE UPDATE ON personnel
-    FOR EACH ROW
-    BEGIN
-        IF  NEW.gender <> "M" AND
-            NEW.gender <> "F" AND
-            NEW.gender <> "Z"
-        THEN
-            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid gender set';
-        END IF;
-END$
-
-DELIMITER ;
-*/

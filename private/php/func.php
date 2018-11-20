@@ -1,8 +1,6 @@
 <?php 
 
 //Functions go here
-
-
 function br(){
 	echo '<br>';
 }
@@ -38,7 +36,6 @@ function getArticle($articleID){
 		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = '.$articleID.';';
 	}
 	
-	echo "Full article";
 	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
 	
 	return $article;

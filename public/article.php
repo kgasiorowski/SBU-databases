@@ -2,19 +2,16 @@
 
 	require_once("../private/php/init.php");
 	
+	$isFilm;
+	
 	if(isset($_GET['articleid']) && $_GET['articleid'] != ''){
 		
 		$articleID = $_GET['articleid'];
-	
 		$article = getArticle($articleID);
-		echo '<pre>';
-		print_r($article);
-		echo '</pre>';
-	
+		$isFilm = $article['isFilm'];
+		
 	}
 
-	
-	
 ?>
 <html>
 <head>
@@ -22,8 +19,15 @@
 	<link rel="stylesheet" type="text/css" href="../private/style/css/style.css"></head>
 </head>
 <body>
-<?php echo isset($articleID)?"Article ID: $articleID":'No articleID given' ?><br>
-This is the article page but it isn't implemented yet.<br>
+
+<h1><?php echo $article['title']?></h1>
+<img src="<?php echo IMG_PATH . $article['imageName'] ?>" alt="<?php echo IMG_PATH . IMAGE_NOT_FOUND?>">
+<br>
+<p><?php echo $article['body']?></p>
+
+
+
+<br>
 <a href="index.php">Click here to go back.</a>
 </body>
 </html>
