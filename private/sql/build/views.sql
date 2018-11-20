@@ -23,14 +23,16 @@ SELECT
     personnel.gender,
     personnel.birthdate,
     film.title,
-    film.rating,
+    rating.rating,
     film.score,
-    film.genre,
+    genre.genre,
     role.role
 FROM credit
 INNER JOIN personnel ON credit.personnelID = personnel.ID
 INNER JOIN film ON credit.filmID = film.ID
 INNER JOIN role ON credit.roleID = role.ID
+INNER JOIN genre ON film.genreID = genre.ID
+INNER JOIN rating ON film.ratingID = rating.ID
 ORDER BY credit.ID;
 
 DROP VIEW IF EXISTS adminv;
@@ -70,8 +72,8 @@ SELECT
     film.language,
     film.description
 FROM film
-INNER JOIN genre ON genre.ID = film.genre
-INNER JOIN rating ON rating.ID = film.rating;
+INNER JOIN genre ON genre.ID = film.genreID
+INNER JOIN rating ON rating.ID = film.ratingID;
 
 DROP VIEW IF EXISTS articlev;
 CREATE VIEW articlev AS

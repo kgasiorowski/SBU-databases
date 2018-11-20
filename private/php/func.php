@@ -5,6 +5,12 @@ function br(){
 	echo '<br>';
 }
 
+function pr($arg){
+	echo '<pre>';
+	print_r($arg);
+	echo '</pre>';
+}
+
 function filterDB($searchString, $filter){
 	
 	global $db;
@@ -39,6 +45,17 @@ function getArticle($articleID){
 	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
 	
 	return $article;
+	
+}
+
+function getCredits($personnelID){
+	global $db;
+	
+	$query = 'SELECT * FROM creditv WHERE personnelID = ' . $personnelID . ';';
+	
+	$credits = $db->query($query);
+	
+	return $credits;
 	
 }
 

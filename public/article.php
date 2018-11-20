@@ -25,6 +25,30 @@
 <br>
 <p><?php echo $article['body']?></p>
 
+<?php 
+
+	// Echo the rest of the person's credits here.
+	
+	$credits = getCredits($article['personnelID']);
+	
+	echo '<table id="table_border">';
+			
+	echo '<tr>';
+	echo '<td> Film ID </td><td> Title </td><td> Role </td><td> Genre </td><td> Rating </td>';
+	echo '</tr>';
+	
+	while($row = $credits->fetch(PDO::FETCH_ASSOC)){
+		
+		echo '<tr>';
+		echo "<td>$row[filmID]</td><td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
+		echo '</tr>';
+		
+	}
+	
+	echo '</table>';
+
+
+?>
 
 
 <br>

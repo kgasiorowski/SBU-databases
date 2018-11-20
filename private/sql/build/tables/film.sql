@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS film(
     PRIMARY KEY(ID),
 
     title CHAR(30) NOT NULL,
-    rating INTEGER NOT NULL DEFAULT 1, FOREIGN KEY(rating) REFERENCES rating(ID),
+    ratingID INTEGER NOT NULL DEFAULT 1, FOREIGN KEY(ratingID) REFERENCES rating(ID),
     score FLOAT,
-    genre INTEGER, FOREIGN KEY(genre) REFERENCES genre(ID),
+    genreID INTEGER, FOREIGN KEY(genreID) REFERENCES genre(ID),
     date_released DATE NOT NULL DEFAULT "2000-01-01",
     duration_in_minutes FLOAT NOT NULL DEFAULT 120,
     language CHAR(20),
