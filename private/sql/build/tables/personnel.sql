@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS personnel(
     midname CHAR(20),
     lastname CHAR(20) NOT NULL,
 
-    gender INTEGER NOT NULL,
-    FOREIGN KEY(gender) REFERENCES gender(ID), 
+    gender ENUM("M", "F", "Z") NOT NULL DEFAULT "M",
 
     birthdate DATE,
     description VARCHAR(64),

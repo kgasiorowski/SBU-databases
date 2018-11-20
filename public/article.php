@@ -1,14 +1,15 @@
 <?php
 
 	require_once("../private/php/init.php");
-
-	//$articleID = null;
 	
 	if(isset($_GET['articleid']) && $_GET['articleid'] != ''){
 		
 		$articleID = $_GET['articleid'];
 	
-		getArticle($articleID);
+		$article = getArticle($articleID);
+		echo '<pre>';
+		print_r($article);
+		echo '</pre>';
 	
 	}
 

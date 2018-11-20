@@ -9,7 +9,6 @@ re-creates the tables one by one.
 -- Delete everything
 source delete.sql;
 
-source tables/gender.sql;
 source tables/genre.sql;
 source tables/rating.sql;
 
@@ -33,3 +32,4 @@ source populate.sql;
 -- Now create the procedures
 source procs.sql;
 source views.sql;
+source perms.sql;

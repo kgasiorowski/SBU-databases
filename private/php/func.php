@@ -32,12 +32,16 @@ function getArticle($articleID){
 	
 	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
 	
-	//print_r($article);
 	if($article['isFilm']){
-		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID;';
+		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = '.$articleID.';';
 	}else{
-		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID;';
+		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = '.$articleID.';';
 	}
+	
+	echo "Full article";
+	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	
+	return $article;
 	
 }
 

@@ -1,10 +1,26 @@
+/*
+
+	Here are all the views defined for interaction with this database.
+	
+	Views are used for two main reasons: 
+	
+	1. Simplicity for the user
+	2. The underlying database can be changed without
+	   the frontend also needing to be changed
+	
+	TODO: Create a new user for this website to use which hides
+	all the regular tables and shows only the views.
+
+*/
+
+
 DROP VIEW IF EXISTS creditv;
 CREATE VIEW creditv AS 
 SELECT
     credit.ID as creditID,
     personnel.ID as personnelID,
     CONCAT(personnel.firstname, " ", personnel.lastname) as name,
-    gender.gender,
+    personnel.gender,
     personnel.birthdate,
     film.ID as filmID,
     film.title,
@@ -15,7 +31,6 @@ SELECT
 FROM credit
 INNER JOIN personnel ON credit.personnelID = personnel.ID
 INNER JOIN film ON credit.filmID = film.ID
-INNER JOIN gender ON gender.ID = personnel.gender
 ORDER BY credit.ID;
 
 DROP VIEW IF EXISTS adminv;
@@ -32,13 +47,14 @@ DROP VIEW IF EXISTS personnelv;
 CREATE VIEW personnelv AS
 SELECT
     personnel.ID,
-    CONCAT(personnel.firstname, " ", personnel.lastname) AS name,
-    gender.gender,
+    CONCAT(personnel.firstname, " ", personnel.lastname) AS fullname,
+	personnel.firstname,
+	personnel.lastname,
+    personnel.gender,
     personnel.birthdate,
     description,
     height
 FROM personnel
-INNER JOIN gender ON gender.ID = personnel.gender
 ORDER BY personnel.ID;
 
 DROP VIEW IF EXISTS filmv;
