@@ -4,14 +4,16 @@
 	
 	$isFilm;
 	
-	if(isset($_GET['articleid']) && $_GET['articleid'] != ''){
+	$articleSet = isset($_GET['articleID']) && $_GET['articleID'] != '';
+	
+	if($articleSet){
 		
-		$articleID = $_GET['articleid'];
+		$articleID = $_GET['articleID'];
 		$article = getArticle($articleID);
 		$isFilm = $article['isFilm'];
 		
 	}
-
+	
 ?>
 <html>
 <head>
@@ -20,34 +22,62 @@
 </head>
 <body>
 
-<h1><?php echo $article['title']?></h1>
-<img src="<?php echo IMG_PATH . $article['imageName'] ?>" alt="<?php echo IMG_PATH . IMAGE_NOT_FOUND?>">
+<h1><?php echo $articleSet?$article['title']:'No Article Found' ?></h1>
+<img src="<?php echo IMG_PATH . ($articleSet?$article['imageName']:'') ?>" alt="No image found">
 <br>
-<p><?php echo $article['body']?></p>
+<p><?php echo $articleSet?$article['body']:'No article was found for that person/film. Add an article' ?></p>
 
 <?php 
 
 	// Echo the rest of the person's credits here.
+	if($articleSet){
 	
-	$credits = getCredits($article['personnelID']);
-	
-	echo '<table id="table_border">';
+		if($isFilm){
+		
+			$credits = getFilmRoles($article['filmID']);
 			
-	echo '<tr>';
-	echo '<td> Film ID </td><td> Title </td><td> Role </td><td> Genre </td><td> Rating </td>';
-	echo '</tr>';
-	
-	while($row = $credits->fetch(PDO::FETCH_ASSOC)){
-		
-		echo '<tr>';
-		echo "<td>$row[filmID]</td><td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
-		echo '</tr>';
-		
+			echo '<table id="table_border">';
+					
+			echo '<tr>';
+			echo '<th> Personnel ID </th><th> Role </th><th> Name </th>';
+			echo '</tr>';
+			
+			while($row = $credits->fetch(PDO::FETCH_ASSOC)){
+				
+				echo '<tr>';
+				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
+				echo '</tr>';
+				
+			}
+			
+			echo '</table>';
+			
+
+		}else{
+			
+			$credits = getCredits($article['personnelID']);
+			
+			echo '<table id="table_border">';
+					
+			echo '<tr>';
+			echo '<th> Film ID </th><th> Title </th><th> Role </th><th> Genre </th><th> Rating </td>';
+			echo '</tr>';
+			
+			while($row = $credits->fetch(PDO::FETCH_ASSOC)){
+				
+				echo '<tr>';
+				echo '<td>';
+				echo "<a href='article.php?articleID=".getArticleIDByFilmID($row['filmID'])."'>$row[filmID]</a>";
+				echo '</td>';
+				echo "<td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
+				echo '</tr>';
+				
+			}
+			
+			echo '</table>';
+			
+		}
 	}
-	
-	echo '</table>';
-
-
 ?>
 
 

@@ -1,10 +1,13 @@
 
-<?php require_once("../private/php/init.php"); ?>
-
 <?php 
+
+	require_once("../private/php/init.php"); 
 
 	$submitted = $_SERVER['REQUEST_METHOD'] == 'POST';
 
+	if($submitted)
+		$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
+	
 ?>
 
 <html>
@@ -25,9 +28,17 @@
 		
 		<select name="filter" form="filterForm">
 		
-			<option value="both">Both</option>
-			<option value="personnel">Personnel</option>
-			<option value="films">Films</option>
+			<option value="both" <?php 
+			echo isset($filter) && $filter == 'both'? 'selected':'';
+			?>>Both</option>
+			
+			<option value="personnel" <?php 
+			echo isset($filter) && $filter == 'personnel'? 'selected':'';
+			?>>Personnel</option>
+			
+			<option value="films" <?php 
+			echo isset($filter) && $filter == 'films'? 'selected':'';
+			?>>Films</option>
 			
 		</select><br>
 		
@@ -41,7 +52,6 @@
 	
 		if($submitted){
 			
-			$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
 			$searchText = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;
 			
 			$results = filterDB($searchText, $filter);
@@ -49,13 +59,13 @@
 			echo '<table id="table_border">';
 			
 			echo '<tr>';
-			echo '<td> Article ID </td><td> Title </td><td> Body </td><td> Author Username </td><td> Author Full Name </td>';
+			echo '<th> Article ID </th><th> Title </th><th> Body </th><th> Author Username </th><th> Author Full Name </th>';
 			echo '</tr>';
 			
 			while($row = $results->fetch(PDO::FETCH_ASSOC)){
 				
 				echo '<tr>';
-				echo "<td><a href='article.php?articleid=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td>";
+				echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td>";
 				echo '</tr>';
 				
 			}
