@@ -26,7 +26,8 @@
 		<input type='submit' name='Submit' value='submit'/>
 	
 	</form>
-
+	<br>
+	
 	<?php 
 	
 	if($submitted){

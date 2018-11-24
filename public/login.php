@@ -32,7 +32,7 @@
 <html>
 <head>
 	<title>Imdb clone</title>
-	<link rel="stylesheet" type="text/css" href="../private/style/css/style.css"></head>
+	<link rel="stylesheet" type="text/css" href="../private/style/css/style.css">
 </head>
 <body>
 
