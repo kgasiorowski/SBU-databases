@@ -5,4 +5,5 @@ GRANT SELECT, INSERT, UPDATE ON imdbc.creditv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.articlev TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.filmv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.adminv TO 'imdbc_frontend'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON imdbc.userv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.personnelv TO 'imdbc_frontend'@'localhost';

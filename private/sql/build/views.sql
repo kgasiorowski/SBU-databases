@@ -91,3 +91,7 @@ FROM
 	article 
 INNER JOIN 
 	user ON user.ID = original_author_id;
+
+DROP VIEW IF EXISTS userv;
+CREATE VIEW userv AS
+SELECT * FROM user;
