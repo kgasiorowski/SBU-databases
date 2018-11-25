@@ -15,7 +15,7 @@
 	<a href="index.php">Click here to go back</a>
 	<h1>Create an account</h2>
 
-	<form id='createAccount' action='createAccount.php' method='post'>
+	<form class='recolor' id='createAccount' action='createAccount.php' method='post'>
 	
 		<label for='username'>Username:</label>
 		<input type='text' name = 'username' id = 'username' maxlength='50'>

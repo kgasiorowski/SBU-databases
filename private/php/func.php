@@ -66,6 +66,11 @@ function getArticleIDByFilmID($filmID){
 	return $db->query('SELECT articleID FROM articlev WHERE filmID = '.$filmID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];
 }
 
+function getArticlesByUsername($username){
+	global $db;
+	return $db->query('SELECT * FROM articlev WHERE author = \''.$username.'\'');
+}
+
 //Returns the user ID or false if login failed
 function verifyLogin($username, $password){
 	global $db;
@@ -105,6 +110,22 @@ function createUser($username, $password){
 		$result = $db->prepare($query)->execute([$username, $password]);
 		return True;
 	}
+	
+}
+
+function getUserByID($id){
+	global $db;
+	
+	$query = 'SELECT * FROM userv WHERE ID = \''.$id.'\';';
+	return $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	
+}
+
+function updateUserInfo($firstname, $lastname, $email, $id){
+	global $db;
+	
+	$query = 'UPDATE userv SET firstname = ?, lastname = ?, email = ? WHERE ID = ?';
+	$db->prepare($query)->execute([$firstname, $lastname, $email, $id]);
 	
 }
 

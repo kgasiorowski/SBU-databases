@@ -25,6 +25,8 @@
 		if($loggedin){
 	
 			echo 'Logged in as \''.$_SESSION['username'].'\' (<a href=\'login.php?logout\'>logout</a> here)';
+			br();
+			echo 'Click <a href="user.php">here</a> to access your user page.';
 		
 		}else{
 			
@@ -44,7 +46,7 @@
 	
 	<h3>Filter the database:</h3>
 	
-	<form action="./index.php" id="filterForm" method="post">
+	<form action="index.php" id="filterForm" method="post">
 	
 		Limit search to: 
 		

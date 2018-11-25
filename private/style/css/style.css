@@ -40,7 +40,10 @@ th {
 	
 }
 
-form {
+select, input, label {display: block;}
+
+
+form.recolor {
 	
 	border: 1px solid white;
 	padding: 5px;
