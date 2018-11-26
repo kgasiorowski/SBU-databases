@@ -15,6 +15,7 @@ TRUNCATE TABLE article;
 TRUNCATE TABLE genre;
 TRUNCATE TABLE rating;
 TRUNCATE TABLE role;
+TRUNCATE TABLE edit;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Add some values to our side tables
@@ -41,4 +42,4 @@ source populate/populate_admin.sql;
 source populate/populate_article.sql;
 
 -- Create some article edits
-source populate/populate_edit.sql;
+-- source populate/populate_edit.sql;

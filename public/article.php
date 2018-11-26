@@ -25,7 +25,25 @@
 <h1><?php echo $articleSet?$article['title']:'No Article Found' ?></h1>
 <img src="<?php echo IMG_PATH . ($articleSet?$article['imageName']:'') ?>" alt="No image found">
 <br>
-<p><?php echo $articleSet?$article['body']:'No article was found for that person/film. Add an article' ?></p>
+<p>
+
+<?php 
+
+	if($articleSet){ 
+		echo $article['body'];
+	}else{
+		
+		$personnelID = isset($_GET['personnelID'])?$_GET['personnelID']:NULL;
+		$filmID = isset($_GET['filmID'])?$_GET['filmID']:NULL;
+		
+		echo 'No article exists for this person/film. ' ;
+		echo "<a href='edit.php?personnelID=$personnelID&filmID=$filmID'>Add this article</a>";
+	
+	}
+	
+?>
+
+</p>
 
 <?php 
 
@@ -45,7 +63,7 @@
 			while($row = $credits->fetch(PDO::FETCH_ASSOC)){
 				
 				echo '<tr>';
-				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
+				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."personnelID=$row[personnelID]'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
 				echo '</tr>';
 				
 			}
@@ -67,7 +85,7 @@
 				
 				echo '<tr>';
 				echo '<td>';
-				echo "<a href='article.php?articleID=".getArticleIDByFilmID($row['filmID'])."'>$row[filmID]</a>";
+				echo "<a href='article.php?articleID=".getArticleIDByFilmID($row['filmID'])."&filmID=$row[filmID]'>$row[filmID]</a>";
 				echo '</td>';
 				echo "<td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
 				echo '</tr>';
@@ -82,7 +100,7 @@
 
 
 <br>
-<a href="index.php">Click here to go back.</a>
+<a href="index.php">Click here to go the index.</a>
 </body>
 </html>
 
