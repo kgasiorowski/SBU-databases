@@ -95,3 +95,19 @@ INNER JOIN
 DROP VIEW IF EXISTS userv;
 CREATE VIEW userv AS
 SELECT * FROM user;
+
+DROP VIEW IF EXISTS editv;
+CREATE VIEW editv AS
+SELECT * FROM edit;
+
+
+
+
+
+
+
+
+
+
+
+

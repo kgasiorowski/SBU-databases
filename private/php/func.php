@@ -33,7 +33,8 @@ function executeQuery($query, $argsArray, $singleVal = False, $getIndex = False,
 	
 	if(!$result){
 		
-		echo 'Error: Query '. $query .' could not be executed with args ' . $argsArray;
+		echo 'Error: Query '. $query .' could not be executed with args';
+		pr($argsArray);
 		die();
 		
 	}
@@ -104,7 +105,7 @@ function verifyLogin($username, $password){
 	
 }
 
-function userISAdmin($userID){
+function userIsAdmin($userID){
 	$query = 'SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = ?';
 	$args = array($userID);
 	return executeQuery($query, $args, true, true, 'userIdAdmin');
@@ -140,6 +141,12 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 	executeQuery($query, $args);
 }
 
+function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle=null, $oldBody=null){
+	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, userID) values(?, ?, ?, ?, ?, ?)';
+	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $userID);
+	executeQuery($query, $args);
+}
+
 function filterDB($searchString, $filter){
 	
 	$str = '%' . $searchString . '%';
@@ -170,6 +177,32 @@ function getArticle($articleID){
 		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = ?';
 	
 	return executeQuery($query, $args, true);
+	
+}
+
+// This sql code is static, so no need for prep
+function getUnapprovedEdits(){
+	//global $db;
+	//return $db->query('SELECT e1.* FROM editv e1 WHERE approved_by_admin_ID IS NULL AND ')->fetchALL(PDO::FETCH_ASSOC);
+}
+
+function testfunc(){
+	global $db;
+	
+	$query = '
+	SELECT e1.* 
+	FROM editv e1 
+	WHERE 
+	approve_by_admin IS NULL
+	AND
+	e1.ID = (SELECT e2.ID
+			FROM editv e2
+			WHERE e2.article_ID = e1.article_ID
+			ORDER BY e2.time_of_edit DESC
+			LIMIT 1)
+	';
+	
+	pr($db->query($query)->fetchALL(PDO::FETCH_ASSOC));
 	
 }
 

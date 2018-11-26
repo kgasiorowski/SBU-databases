@@ -17,11 +17,11 @@ CREATE TABLE IF NOT EXISTS edit (
     time_of_approval DATETIME DEFAULT NULL, -- The date and time that this edit was approved (may be never)
 
     -- The old content
-    old_title VARCHAR(20), 
+    old_title VARCHAR(20) DEFAULT NULL, 
     new_title VARCHAR(20) NOT NULL,
 
     -- The new content
-    old_body VARCHAR(256),
+    old_body VARCHAR(256) DEFAULT NULL,
     new_body VARCHAR(256) NOT NULL,
     
     -- Which user submitted the edit

@@ -81,6 +81,13 @@
 
 	echo '</table>';
 
+	if(userIsAdmin($uid)){
+		
+		echo 'Latest unapproved edits';
+		
+	}
+	
+	
 ?>
 	
 </body>
