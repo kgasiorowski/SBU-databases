@@ -11,6 +11,12 @@ function pr($arg){
 	echo '</pre>';
 }
 
+function loggedIn(){
+	
+	return isset($_SESSION['uid']) && isset($_SESSION['username']);
+	
+}
+
 function executeQuery($query, $argsArray, $singleVal = False, $getIndex = False, $index = ''){
 	global $db;
 
@@ -52,31 +58,25 @@ function getCredits($personnelID){
 }
 
 function getFilmRoles($filmID){
-	$query = 'SELECT * FROM creditv WHERE filmID = ? ORDER BY role';
+	$query = 'SELECT * FROM creditv WHERE filmID = ? ORDER BY role, personnelID';
 	$args = array($filmID);
 	return executeQuery($query, $args);
 }
 
-function getArticleIDByPersonnelID($personnelID){
-	/*global $db;
-	return $db->query('SELECT articleID FROM articlev WHERE personnelID = '.$personnelID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];*/
-	$query = 'SELECT articleID FROM articlev WHERE personnelID = ?';
+function getArticleByPersonnelID($personnelID){
+	$query = 'SELECT * FROM articlev WHERE personnelID = ?';
 	$args = array($personnelID);
 	return executeQuery($query, $args, true, true, 'articleID');
 }
 
-function getArticleIDByFilmID($filmID){
-	//global $db;
-	//return $db->query('SELECT articleID FROM articlev WHERE filmID = '.$filmID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];
-	$query = 'SELECT articleID FROM articlev WHERE filmID = ?';
+function getArticleByFilmID($filmID){
+	$query = 'SELECT * FROM articlev WHERE filmID = ?';
 	$args = array($filmID);
 	return executeQuery($query, $args, true, true, 'articleID');
 	
 }
 
 function getArticlesByUsername($username){
-	//global $db;
-	//return $db->query('SELECT * FROM articlev WHERE author = \''.$username.'\'');
 	$query = 'SELECT * FROM articlev WHERE author = ?';
 	$args = array($username);
 	return executeQuery($query, $args);
@@ -84,26 +84,27 @@ function getArticlesByUsername($username){
 
 //Returns the user ID or false if login failed
 function verifyLogin($username, $password){
-	global $db;
-	$query = 'SELECT ID FROM userv WHERE username = \''.$username.'\' AND password = \''.$password.'\';';
-	$result = $db->query($query);
 	
-	if($result->rowCount() > 0){
+	$query = 'SELECT ID FROM userv WHERE username = ? AND password = ?';
+	$args = array($username, $password);
+	
+	$results = executeQuery($query, $args, true);
+	
+	pr($results);
+	
+	if(count($results) != 0){
 		
-		$result = $result->fetch(PDO::FETCH_ASSOC)['ID'];
-		return $result;
+		return $results['ID'];
 		
 	}else{
-		//Query failed, user not found
-		return False;
-	
+		
+		return false;
+		
 	}
 	
 }
 
 function userISAdmin($userID){
-	//global $db;
-	//return $db->query('SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = \''.$userID.'\';')->fetch(PDO::FETCH_ASSOC)['userIsAdmin'];
 	$query = 'SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = ?';
 	$args = array($userID);
 	return executeQuery($query, $args, true, true, 'userIdAdmin');
@@ -128,17 +129,9 @@ function createUser($username, $password){
 }
 
 function getUserByID($id){
-	/*
-	global $db;
-	
-	$query = 'SELECT * FROM userv WHERE ID = \''.$id.'\';';
-	return $db->query($query)->fetch(PDO::FETCH_ASSOC);
-	*/
-	
 	$query = 'SELECT * FROM userv WHERE ID = ?';
 	$args = array($id);
 	return executeQuery($query, $args, true);
-	
 }
 
 function updateUserInfo($firstname, $lastname, $email, $id){
@@ -148,23 +141,8 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 }
 
 function filterDB($searchString, $filter){
-	/*
-	global $db;
-	
-	$query = 'SELECT * FROM articlev WHERE ';
-				
-	if($filter == 'personnel')
-		$query .= 'isFilm = 0 AND ';
-	else if($filter == 'films')
-		$query .= 'isFilm = 1 AND ';
-	
-	$query .= '(body LIKE \'%'.$searchString.'%\' OR title LIKE \'%'.$searchString.'%\');';
-	
-	return $db->query($query);
-	*/
 	
 	$str = '%' . $searchString . '%';
-	
 	$args = array($str, $str);
 	$query = 'SELECT * FROM articlev WHERE ';
 				
@@ -180,22 +158,18 @@ function filterDB($searchString, $filter){
 }
 
 function getArticle($articleID){
+	// First we find if the article referenced by articleID is a film
+	$query = 'SELECT * FROM articlev WHERE articleID=?';
+	$args = array($articleID);
+	$articleIsFilm = executeQuery($query, $args, true, true, 'isFilm');
 	
-	global $db;
+	// Get all the article data
+	if($articleIsFilm)
+		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = ?';
+	else
+		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = ?';
 	
-	$query = 'SELECT * FROM articlev WHERE articleID='.$articleID;
-	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
-	
-	
-	
-	if($article['isFilm']){
-		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = '.$articleID.';';
-	}else{
-		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = '.$articleID.';';
-	}
-	
-	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
-	return $article;
+	return executeQuery($query, $args, true);
 	
 }
 

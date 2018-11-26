@@ -21,7 +21,7 @@
 	<link rel="stylesheet" type="text/css" href="../private/style/css/style.css"></head>
 </head>
 <body>
-
+<a href="index.php">Click here to go the index.</a>
 <h1><?php echo $articleSet?$article['title']:'No Article Found' ?></h1>
 <img src="<?php echo IMG_PATH . ($articleSet?$article['imageName']:'') ?>" alt="No image found">
 <br>
@@ -57,13 +57,13 @@
 			echo '<table id="table_border">';
 					
 			echo '<tr>';
-			echo '<th> Personnel ID </th><th> Role </th><th> Name </th>';
+			echo '<th> Name </th><th> Role </th><th>Link</th>';
 			echo '</tr>';
 			
 			foreach($credits as $row){
 				
 				echo '<tr>';
-				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."&personnelID=$row[personnelID]'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
+				echo "<td>$row[name]</td><td>$row[role]</td><td><a href='article.php?articleID=".getArticleByPersonnelID($row['personnelID'])."&personnelID=$row[personnelID]'>Link</a></td>";
 				echo '</tr>';
 				
 			}
@@ -78,16 +78,16 @@
 			echo '<table id="table_border">';
 					
 			echo '<tr>';
-			echo '<th> Film ID </th><th> Title </th><th> Role </th><th> Genre </th><th> Rating </td>';
+			echo '<th> Title </th><th> Role </th><th> Genre </th><th> Rating </td><th> Link </th>';
 			echo '</tr>';
 			
 			foreach($credits as $row){
 				
 				echo '<tr>';
-				echo '<td>';
-				echo "<a href='article.php?articleID=".getArticleIDByFilmID($row['filmID'])."&filmID=$row[filmID]'>$row[filmID]</a>";
-				echo '</td>';
 				echo "<td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
+				echo '<td>';
+				echo "<a href='article.php?articleID=".getArticleByFilmID($row['filmID'])."&filmID=$row[filmID]'>Link</a>";
+				echo '</td>';
 				echo '</tr>';
 				
 			}
@@ -100,7 +100,7 @@
 
 
 <br>
-<a href="index.php">Click here to go the index.</a>
+Click <a href='edit.php?articleID=<? echo "$articleID"; ?>'>here</a> to edit this article.
 </body>
 </html>
 

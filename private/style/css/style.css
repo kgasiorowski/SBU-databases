@@ -42,13 +42,18 @@ th {
 
 select, input, label {display: block;}
 
-
 form.recolor {
 	
 	border: 1px solid white;
 	padding: 5px;
 	background-color: #435268;
 	display: inline-block;
+	
+}
+
+textarea {
+	
+	resize: none;
 	
 }
 

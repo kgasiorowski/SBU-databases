@@ -1,7 +1,7 @@
 <?php 
 
 	require_once("../private/php/init.php");
-	$loggedin = isset($_SESSION['uid']) && isset($_SESSION['username']);
+	$loggedin = loggedIn();
 	
 	if($loggedin)
 	{
