@@ -20,7 +20,7 @@
 </head>
 <body>
 <a href="index.php">Back to index</a>
-<br>
+<h1>User Page</h1>
 <?php 
 	
 	if(!$loggedin){ 
@@ -60,7 +60,7 @@
 	
 	<?php
 	
-	$results = getArticlesByUsername($username);
+	$articles = getArticlesByUsername($username);
 
 	br();
 	echo 'Your articles:';
@@ -71,7 +71,7 @@
 	echo '<th> Article ID </th><th> Title </th>';
 	echo '</tr>';
 	
-	while($row = $results->fetch(PDO::FETCH_ASSOC)){
+	foreach($articles as $row){
 		
 		echo '<tr>';
 		echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td>";

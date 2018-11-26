@@ -74,7 +74,7 @@
 			
 			$results = filterDB($searchText, $filter);
 
-			if($results && $results->rowCount() != 0)
+			if($results && count($results) != 0)
 			{
 				echo '<table id="table_border">';
 				
@@ -82,7 +82,7 @@
 				echo '<th> Article ID </th><th> Title </th><th> Body </th><th> Author Username </th><th> Author Full Name </th>';
 				echo '</tr>';
 				
-				while($row = $results->fetch(PDO::FETCH_ASSOC)){
+				foreach($results as $row){
 					
 					echo '<tr>';
 					echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td>";

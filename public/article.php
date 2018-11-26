@@ -60,10 +60,10 @@
 			echo '<th> Personnel ID </th><th> Role </th><th> Name </th>';
 			echo '</tr>';
 			
-			while($row = $credits->fetch(PDO::FETCH_ASSOC)){
+			foreach($credits as $row){
 				
 				echo '<tr>';
-				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."personnelID=$row[personnelID]'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
+				echo "<td><a href='article.php?articleID=".getArticleIDByPersonnelID($row['personnelID'])."&personnelID=$row[personnelID]'>$row[personnelID]</a></td><td>$row[role]</td><td>$row[name]</td>";
 				echo '</tr>';
 				
 			}
@@ -81,7 +81,7 @@
 			echo '<th> Film ID </th><th> Title </th><th> Role </th><th> Genre </th><th> Rating </td>';
 			echo '</tr>';
 			
-			while($row = $credits->fetch(PDO::FETCH_ASSOC)){
+			foreach($credits as $row){
 				
 				echo '<tr>';
 				echo '<td>';

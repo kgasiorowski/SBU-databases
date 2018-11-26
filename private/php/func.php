@@ -11,64 +11,75 @@ function pr($arg){
 	echo '</pre>';
 }
 
-function filterDB($searchString, $filter){
-	
+function executeQuery($query, $argsArray, $singleVal = False, $getIndex = False, $index = ''){
 	global $db;
-	
-	$query = 'SELECT * FROM articlev WHERE ';
-				
-	if($filter == 'personnel')
-		$query .= 'isFilm = 0 AND ';
-	else if($filter == 'films')
-		$query .= 'isFilm = 1 AND ';
-	
-	$query .= '(body LIKE \'%'.$searchString.'%\' OR title LIKE \'%'.$searchString.'%\');';
-	
-	return $db->query($query);
-	
-}
 
-function getArticle($articleID){
+	$stmt = $db->prepare($query);
 	
-	global $db;
-	
-	$query = 'SELECT * FROM articlev WHERE articleID='.$articleID;
-	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
-	
-	if($article['isFilm']){
-		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = '.$articleID.';';
-	}else{
-		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = '.$articleID.';';
+	if(!$stmt){
+		
+		echo 'Error: Query '. $query .' could not be prepared';
+		die();
+		
 	}
 	
-	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
-	return $article;
+	$result = $stmt->execute($argsArray);
+	
+	if(!$result){
+		
+		echo 'Error: Query '. $query .' could not be executed with args ' . $argsArray;
+		die();
+		
+	}
+	
+	if($singleVal){
+		
+		if($getIndex) 
+			return $stmt->fetch(PDO::FETCH_ASSOC)[$index];
+		else
+			return $stmt->fetch(PDO::FETCH_ASSOC);
+			
+	
+	}else
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	
 }
 
 function getCredits($personnelID){
-	global $db;
-	return $db->query('SELECT * FROM creditv WHERE personnelID = ' . $personnelID . ';');
+	$query = 'SELECT * FROM creditv WHERE personnelID = ?';
+	$args = array($personnelID);
+	return executeQuery($query, $args);
 }
 
 function getFilmRoles($filmID){
-	global $db;
-	return $db->query('SELECT * FROM creditv WHERE filmID = '. $filmID .' ORDER BY role;');
+	$query = 'SELECT * FROM creditv WHERE filmID = ? ORDER BY role';
+	$args = array($filmID);
+	return executeQuery($query, $args);
 }
 
 function getArticleIDByPersonnelID($personnelID){
-	global $db;
-	return $db->query('SELECT articleID FROM articlev WHERE personnelID = '.$personnelID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];
+	/*global $db;
+	return $db->query('SELECT articleID FROM articlev WHERE personnelID = '.$personnelID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];*/
+	$query = 'SELECT articleID FROM articlev WHERE personnelID = ?';
+	$args = array($personnelID);
+	return executeQuery($query, $args, true, true, 'articleID');
 }
 
 function getArticleIDByFilmID($filmID){
-	global $db;
-	return $db->query('SELECT articleID FROM articlev WHERE filmID = '.$filmID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];
+	//global $db;
+	//return $db->query('SELECT articleID FROM articlev WHERE filmID = '.$filmID.';')->fetch(PDO::FETCH_ASSOC)['articleID'];
+	$query = 'SELECT articleID FROM articlev WHERE filmID = ?';
+	$args = array($filmID);
+	return executeQuery($query, $args, true, true, 'articleID');
+	
 }
 
 function getArticlesByUsername($username){
-	global $db;
-	return $db->query('SELECT * FROM articlev WHERE author = \''.$username.'\'');
+	//global $db;
+	//return $db->query('SELECT * FROM articlev WHERE author = \''.$username.'\'');
+	$query = 'SELECT * FROM articlev WHERE author = ?';
+	$args = array($username);
+	return executeQuery($query, $args);
 }
 
 //Returns the user ID or false if login failed
@@ -91,8 +102,11 @@ function verifyLogin($username, $password){
 }
 
 function userISAdmin($userID){
-	global $db;
-	return $db->query('SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = \''.$userID.'\';')->fetch(PDO::FETCH_ASSOC)['userIsAdmin'];
+	//global $db;
+	//return $db->query('SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = \''.$userID.'\';')->fetch(PDO::FETCH_ASSOC)['userIsAdmin'];
+	$query = 'SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = ?';
+	$args = array($userID);
+	return executeQuery($query, $args, true, true, 'userIdAdmin');
 }
 
 // If there already exists a tuple with the given username, return false
@@ -114,18 +128,74 @@ function createUser($username, $password){
 }
 
 function getUserByID($id){
+	/*
 	global $db;
 	
 	$query = 'SELECT * FROM userv WHERE ID = \''.$id.'\';';
 	return $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	*/
+	
+	$query = 'SELECT * FROM userv WHERE ID = ?';
+	$args = array($id);
+	return executeQuery($query, $args, true);
 	
 }
 
 function updateUserInfo($firstname, $lastname, $email, $id){
+	$query = 'UPDATE userv SET firstname = ?, lastname = ?, email = ? WHERE ID = ?';
+	$args = array($firstname, $lastname, $email, $id);
+	executeQuery($query, $args);
+}
+
+function filterDB($searchString, $filter){
+	/*
 	global $db;
 	
-	$query = 'UPDATE userv SET firstname = ?, lastname = ?, email = ? WHERE ID = ?';
-	$db->prepare($query)->execute([$firstname, $lastname, $email, $id]);
+	$query = 'SELECT * FROM articlev WHERE ';
+				
+	if($filter == 'personnel')
+		$query .= 'isFilm = 0 AND ';
+	else if($filter == 'films')
+		$query .= 'isFilm = 1 AND ';
+	
+	$query .= '(body LIKE \'%'.$searchString.'%\' OR title LIKE \'%'.$searchString.'%\');';
+	
+	return $db->query($query);
+	*/
+	
+	$str = '%' . $searchString . '%';
+	
+	$args = array($str, $str);
+	$query = 'SELECT * FROM articlev WHERE ';
+				
+	if($filter == 'personnel')
+		$query .= 'isFilm = 0 AND ';
+	else if($filter == 'films')
+		$query .= 'isFilm = 1 AND ';
+	
+	$query .= '(body LIKE ? OR title LIKE ?);';
+	
+	return executeQuery($query, $args);
+	
+}
+
+function getArticle($articleID){
+	
+	global $db;
+	
+	$query = 'SELECT * FROM articlev WHERE articleID='.$articleID;
+	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	
+	
+	
+	if($article['isFilm']){
+		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = '.$articleID.';';
+	}else{
+		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = '.$articleID.';';
+	}
+	
+	$article = $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	return $article;
 	
 }
 
