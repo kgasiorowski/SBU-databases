@@ -108,7 +108,7 @@ function verifyLogin($username, $password){
 function userIsAdmin($userID){
 	$query = 'SELECT COUNT(*) as userIsAdmin FROM adminv WHERE userID = ?';
 	$args = array($userID);
-	return executeQuery($query, $args, true, true, 'userIdAdmin');
+	return executeQuery($query, $args, true, true, 'userIsAdmin');
 }
 
 // If there already exists a tuple with the given username, return false
@@ -143,8 +143,14 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 
 function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle=null, $oldBody=null){
 	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, userID) values(?, ?, ?, ?, ?, ?)';
+	
+	if($oldTitle != null && $oldBody != null)
+		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0)
+			return false;
+		
 	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $userID);
 	executeQuery($query, $args);
+	return true;
 }
 
 function filterDB($searchString, $filter){
@@ -182,28 +188,21 @@ function getArticle($articleID){
 
 // This sql code is static, so no need for prep
 function getUnapprovedEdits(){
-	//global $db;
-	//return $db->query('SELECT e1.* FROM editv e1 WHERE approved_by_admin_ID IS NULL AND ')->fetchALL(PDO::FETCH_ASSOC);
-}
-
-function testfunc(){
 	global $db;
-	
-	$query = '
-	SELECT e1.* 
-	FROM editv e1 
-	WHERE 
-	approve_by_admin IS NULL
-	AND
-	e1.ID = (SELECT e2.ID
-			FROM editv e2
-			WHERE e2.article_ID = e1.article_ID
-			ORDER BY e2.time_of_edit DESC
-			LIMIT 1)
-	';
-	
-	pr($db->query($query)->fetchALL(PDO::FETCH_ASSOC));
-	
+	return $db->query($query = '
+	SELECT e1.*, u1.*
+	FROM editv e1
+	INNER JOIN
+	(
+	SELECT MAX(time_of_edit) latest_edit_date, article_ID
+	FROM editv
+	GROUP BY article_ID
+	) e2
+	ON e1.article_ID = e2.article_ID
+	AND e1.time_of_edit = e2.latest_edit_date
+	INNER JOIN userv u1 ON u1.ID = e1.userID
+	WHERE time_of_approval IS NULL
+	')->fetchALL(PDO::FETCH_ASSOC);
 }
 
 ?>

@@ -60,30 +60,59 @@
 	
 	<?php
 	
+	br();
+	echo '<h3>Your articles:</h3>';
+	
 	$articles = getArticlesByUsername($username);
 
-	br();
-	echo 'Your articles:';
+	if(count($articles) != 0){
 	
-	echo '<table id="table_border">';
-				
-	echo '<tr>';
-	echo '<th> Article ID </th><th> Title </th>';
-	echo '</tr>';
-	
-	foreach($articles as $row){
-		
+		echo '<table id="table_border">';
+					
 		echo '<tr>';
-		echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td>";
+		echo '<th> Article ID </th><th> Title </th>';
 		echo '</tr>';
+
+		foreach($articles as $row){
+			
+			echo '<tr>';
+			echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td>";
+			echo '</tr>';
+			
+		}
+
+		echo '</table>';
+	
+	}else{
+		
+		echo 'You have created no articles. Ayy lmao';
 		
 	}
-
-	echo '</table>';
-
+	
+	
+	
 	if(userIsAdmin($uid)){
 		
-		echo 'Latest unapproved edits';
+		$edits = getUnapprovedEdits();
+		
+		echo '<h3>Latest unapproved edits</h3>';
+		
+		echo '<table id="table_border">';
+					
+		echo '<tr>';
+		echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th>';
+		echo '</tr>';
+
+		foreach($edits as $row){
+			
+			echo '<tr>';
+			echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td><td>$row[username]</td><td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td><td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'],3 ,true)."</pre></td>";
+			echo '</tr>';
+			
+		}
+
+		echo '</table>';
+		
 		
 	}
 	

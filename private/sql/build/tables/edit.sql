@@ -43,8 +43,12 @@ CREATE TRIGGER validate_approved_insert BEFORE INSERT ON edit
            (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL) 
            OR
            (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
+		   OR
+		   ((STRCMP(NEW.old_title, NEW.new_title) = 0)
+		   AND
+		   (STRCMP(NEW.old_body, NEW.new_body) = 0))
         THEN
-            SIGNAL SQLSTATE '45000' SET message_text = 'Edit must have approval date when approved';
+            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid edit given';
         END IF;
 END$
             
@@ -55,8 +59,12 @@ CREATE TRIGGER validate_approved_update BEFORE UPDATE ON edit
            (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL)
            OR
            (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
+		   OR
+		   ((STRCMP(NEW.old_title, NEW.new_title) = 0)
+		   OR
+		   (STRCMP(NEW.old_body, NEW.new_body) = 0))
         THEN
-            SIGNAL SQLSTATE '45000' SET message_text = 'Edit must have approval date when approved';
+            SIGNAL SQLSTATE '45000' SET message_text = 'Invalid edit given';
         END IF;
 END$
 
