@@ -190,7 +190,7 @@ function getArticle($articleID){
 function getUnapprovedEdits(){
 	global $db;
 	return $db->query($query = '
-	SELECT e1.*, u1.*
+	SELECT e1.*, u1.username
 	FROM editv e1
 	INNER JOIN
 	(
@@ -200,9 +200,22 @@ function getUnapprovedEdits(){
 	) e2
 	ON e1.article_ID = e2.article_ID
 	AND e1.time_of_edit = e2.latest_edit_date
-	INNER JOIN userv u1 ON u1.ID = e1.userID
+	INNER JOIN userv u1 on u1.ID = e1.userID
 	WHERE time_of_approval IS NULL
-	')->fetchALL(PDO::FETCH_ASSOC);
+	')->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getEditByID($editID){
+	$query = 'SELECT * FROM editv WHERE ID = ? LIMIT 1';
+	$args = array($editID);
+	return executeQuery($query, $args, true);		
+}
+
+function approveEdit($editID, $adminID){
+	$query = 'UPDATE editv SET approved_by_admin_ID = ?, time_of_approval = ? WHERE ID = ?';
+	// UPDATE userv SET firstname = ?, lastname = ?, email = ? WHERE ID = ?
+	$args = array($adminID, date("Y-m-d H:i:s"), $editID);
+	executeQuery($query, $args);
 }
 
 ?>

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS article(
 
     original_author_id INT NOT NULL, FOREIGN KEY(original_author_id) REFERENCES user(ID),
 
-    title VARCHAR(20) NOT NULL,
+    title VARCHAR(64) NOT NULL,
     body VARCHAR(256) NOT NULL,
 	imageName VARCHAR(64)
 	

@@ -1,5 +1,5 @@
 <?php 
-
+	
 	require_once("../private/php/init.php");
 	$loggedin = loggedIn();
 	
@@ -33,8 +33,8 @@
 
 	if(isset($_POST['submit'])){
 			
-			updateUserInfo($_POST['firstname'], $_POST['lastname'], $_POST['email'], $uid);
-			echo 'Data updated successfully!';br();
+		updateUserInfo($_POST['firstname'], $_POST['lastname'], $_POST['email'], $uid);
+		echo 'Data updated successfully!';br();
 	
 	}
 	
@@ -100,13 +100,19 @@
 		echo '<table id="table_border">';
 					
 		echo '<tr>';
-		echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th>';
+		echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th><th></th>';
 		echo '</tr>';
 
 		foreach($edits as $row){
 			
+			pr($row);
+			
 			echo '<tr>';
-			echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td><td>$row[username]</td><td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td><td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'],3 ,true)."</pre></td>";
+			echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td>";
+			echo "<td>$row[username]</td>";
+			echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td>"; 
+			echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'], 3, true)."</pre></td>"; 
+			echo "<td><a href='approve.php?editID=".$row['ID']."'>Approve</a></td>";
 			echo '</tr>';
 			
 		}

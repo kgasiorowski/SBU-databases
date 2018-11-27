@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS edit (
     time_of_approval DATETIME DEFAULT NULL, -- The date and time that this edit was approved (may be never)
 
     -- The old content
-    old_title VARCHAR(20) DEFAULT NULL, 
-    new_title VARCHAR(20) NOT NULL,
+    old_title VARCHAR(64) DEFAULT NULL, 
+    new_title VARCHAR(64) NOT NULL,
 
     -- The new content
     old_body VARCHAR(256) DEFAULT NULL,
@@ -61,7 +61,7 @@ CREATE TRIGGER validate_approved_update BEFORE UPDATE ON edit
            (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
 		   OR
 		   ((STRCMP(NEW.old_title, NEW.new_title) = 0)
-		   OR
+		   AND
 		   (STRCMP(NEW.old_body, NEW.new_body) = 0))
         THEN
             SIGNAL SQLSTATE '45000' SET message_text = 'Invalid edit given';
