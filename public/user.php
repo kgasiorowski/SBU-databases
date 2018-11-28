@@ -106,7 +106,7 @@
 			echo '<table id="table_border">';
 						
 			echo '<tr>';
-			echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th><th></th>';
+			echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th><th> Image Name Diff </th><th></th>';
 			echo '</tr>';
 
 			foreach($edits as $row){
@@ -114,8 +114,9 @@
 				echo '<tr>';
 				echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td>";
 				echo "<td>$row[username]</td>";
-				echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td>"; 
-				echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'], 3, true)."</pre></td>"; 
+				echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'])."</pre></td>"; 
+				echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'])."</pre></td>";
+				echo "<td><pre>".xdiff_string_diff($row['old_image'], $row['new_image'])."</pre></td>";				
 				echo "<td><a href='approve.php?editID=".$row['ID']."'>Approve</a></td>";
 				echo '</tr>';
 				

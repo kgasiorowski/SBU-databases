@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS edit (
     article_ID INTEGER, --  Which article was edited. May be null which suggests the article doesn't exist yet
     FOREIGN KEY(article_ID) REFERENCES article(ID),
 
-	isFilm BOOLEAN NOT NULL DEFAULT FALSE,
+	isFilm BOOLEAN,
 	newfilmID INT, FOREIGN KEY(newfilmID) REFERENCES film(ID),
     newpersonnelID INT, FOREIGN KEY(newpersonnelID) REFERENCES personnel(ID),
 	
@@ -48,10 +48,6 @@ CREATE TRIGGER validate_approved_insert BEFORE INSERT ON edit
            (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL) 
            OR
            (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
-		   OR
-		   ((STRCMP(NEW.old_title, NEW.new_title) = 0)
-		   AND
-		   (STRCMP(NEW.old_body, NEW.new_body) = 0))
         THEN
             SIGNAL SQLSTATE '45000' SET message_text = 'Invalid edit given';
         END IF;
@@ -64,10 +60,6 @@ CREATE TRIGGER validate_approved_update BEFORE UPDATE ON edit
            (NEW.approved_by_admin_ID IS NULL AND NEW.time_of_approval IS NOT NULL)
            OR
            (NEW.approved_by_admin_ID IS NOT NULL AND NEW.time_of_approval IS NULL)
-		   OR
-		   ((STRCMP(NEW.old_title, NEW.new_title) = 0)
-		   AND
-		   (STRCMP(NEW.old_body, NEW.new_body) = 0))
         THEN
             SIGNAL SQLSTATE '45000' SET message_text = 'Invalid edit given';
         END IF;

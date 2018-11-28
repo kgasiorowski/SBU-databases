@@ -144,12 +144,12 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTitle, $oldBody, $oldImage, $isFilm, $filmID, $personnelID){
 	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, old_image, new_image, userID, isFilm, newfilmID, newpersonnelID) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 	
-	if($oldTitle != null && $oldBody != null)
-		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0)
+	if($oldTitle != null && $oldBody != null && $oldImage != null)
+		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0 && strcmp($newImage, $oldImage)==0)
 			return false;
 	
-	if($oldTitle == null && $oldBody == null)
-		if($newTitle == null || $newTitle == '' || $newBody == null || $newBody == '')
+	if($oldTitle == null && $oldBody == null && $oldImage == null)
+		if($newTitle == null || $newTitle == '' || $newBody == null || $newBody == '' || $newImage == null || $newImage == '')
 			return false; // The new stuff can't be empty
 	
 	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $oldImage, $newImage, $userID, $isFilm, $filmID, $personnelID);
