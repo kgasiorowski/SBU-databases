@@ -20,14 +20,15 @@ CREATE TABLE IF NOT EXISTS edit (
     time_of_edit DATETIME NOT NULL DEFAULT NOW(), -- The date and time of the edit
     time_of_approval DATETIME DEFAULT NULL, -- The date and time that this edit was approved (may be never)
 
-    -- The old content
     old_title VARCHAR(64) DEFAULT NULL, 
     new_title VARCHAR(64) NOT NULL,
 
-    -- The new content
     old_body VARCHAR(256) DEFAULT NULL,
     new_body VARCHAR(256) NOT NULL,
     
+	old_image VARCHAR(64) DEFAULT NULL,
+	new_image VARCHAR(64) NOT NULL,
+	
     -- Which user submitted the edit
     userID INTEGER NOT NULL,
     FOREIGN KEY(userID) REFERENCES user(ID),

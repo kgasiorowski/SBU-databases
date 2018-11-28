@@ -33,10 +33,11 @@
 		// Get the new things
 		$newTitle = $_POST['title'];
 		$newBody = $_POST['body'];
+		$newImage = $_POST['image'];
 		
 		$isFilm = isset($filmID)?1:0;
 		
-		$error = !createEdit($articleID, $uid, $newTitle, $newBody, $article['title'], $article['body'], $isFilm, $filmID, $personnelID);
+		$error = !createEdit($articleID, $uid, $newTitle, $newBody, $newImage, $article['title'], $article['body'], $article['imageName'], $isFilm, $filmID, $personnelID);
 	
 	}
 	
@@ -62,6 +63,10 @@
 		<label for="body">Body:</label>
 		<textarea name="body" form = 'editform' rows='20' cols='100'><? echo $article!=null?$article['body']:'' ?></textarea>
 		<br>
+		
+		<label for="image">Image filename:</label>
+		<input type="text" name="image" value="<? echo $article!=null?$article['imageName']:''?>">
+		
 		<input type='submit' name='submit' value='Update info' <? echo $submitted && !$error?'disabled':''?>/>
 	
 	</form>

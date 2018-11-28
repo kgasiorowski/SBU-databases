@@ -141,8 +141,8 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 	executeQuery($query, $args);
 }
 
-function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle, $oldBody, $isFilm, $filmID, $personnelID){
-	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, userID, isFilm, newfilmID, newpersonnelID) values(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTitle, $oldBody, $oldImage, $isFilm, $filmID, $personnelID){
+	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, old_image, new_image, userID, isFilm, newfilmID, newpersonnelID) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 	
 	if($oldTitle != null && $oldBody != null)
 		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0)
@@ -152,7 +152,7 @@ function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle, $oldBod
 		if($newTitle == null || $newTitle == '' || $newBody == null || $newBody == '')
 			return false; // The new stuff can't be empty
 	
-	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $userID, $isFilm, $filmID, $personnelID);
+	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $oldImage, $newImage, $userID, $isFilm, $filmID, $personnelID);
 	executeQuery($query, $args);
 	return true;
 }
@@ -246,18 +246,17 @@ function approveEdit($editID, $adminID){
 	$args = array($editID);
 	$editdata = executeQuery($query, $args, true);
 	
-	pr($editdata);
-	
 	if(isset($editdata['article_ID'])){
 	
 		$query = '
 		UPDATE articlev SET 
 			title = (SELECT new_title FROM editv WHERE ID = ? LIMIT 1),
-			body = (SELECT new_body FROM editv WHERE ID = ? LIMIT 1)
+			body = (SELECT new_body FROM editv WHERE ID = ? LIMIT 1),
+			imageName = (SELECT new_image FROM editv WHERE ID = ? LIMIT 1)
 		WHERE 
 			articleID = (SELECT article_ID FROM editv WHERE ID = ? LIMIT 1)
 		';
-		$args = array($editID, $editID, $editID);
+		$args = array($editID, $editID, $editID, $editID);
 	
 	}else{
 		
@@ -268,21 +267,19 @@ function approveEdit($editID, $adminID){
 	executeQuery($query, $args);
 	
 	// Now just update the old edit to set the article_ID
-	if($editdata['isFilm']){
-		
-		$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE filmID = ?) WHERE ID = ?';
-		$args = array($editdata['newfilmID'], $editID);
-		
-	}else{
-		
-		$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE personnelID = ?) WHERE ID = ?';
-		$args = array($editdata['newpersonnelID'], $editID);
-		
+	if(true){
+		if($editdata['isFilm']){
+			
+			$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE filmID = ?) WHERE ID = ? AND article_ID IS NULL';
+			$args = array($editdata['newfilmID'], $editID);
+			
+		}else{
+			
+			$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE personnelID = ?) WHERE ID = ? AND article_ID IS NULL';
+			$args = array($editdata['newpersonnelID'], $editID);
+			
+		}
 	}
-	
-	pr($query);
-	pr($args);
-	
 	executeQuery($query, $args);
 	
 }

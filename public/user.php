@@ -125,6 +125,9 @@
 		
 		}
 		
+		echo '<br>File upload form goes here';
+		
+		
 	}
 	
 	
