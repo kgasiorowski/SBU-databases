@@ -60,7 +60,6 @@
 	
 	<?php
 	
-	br();
 	echo '<h3>Your articles:</h3>';
 	
 	$articles = getArticlesByUsername($username);
@@ -86,6 +85,7 @@
 	}else{
 		
 		echo 'There are no articles associated with this account.';
+		echo '<hr>';
 		
 	}
 	
@@ -100,6 +100,7 @@
 		if(count($edits) == 0){
 			
 			echo 'There are no pending edits.';
+			echo '<hr>';
 			
 		}else{
 		
@@ -125,9 +126,6 @@
 			echo '</table>';
 		
 		}
-		
-		echo '<br>File upload form goes here';
-		
 		
 	}
 	

@@ -284,4 +284,37 @@ function approveEdit($editID, $adminID){
 	
 }
 
+function getFilmInfo($articleID){
+	$query = '
+	SELECT 
+		rating, 
+		score, 
+		genre, 
+		CONCAT(MONTHNAME(date_released), " ", DAY(date_released), ", ", YEAR(date_released)) AS date_released, 
+		duration_in_minutes, 
+		language, 
+		description 
+	FROM 
+		filmv 
+	WHERE ID = (SELECT filmID FROM articlev WHERE articleID = ?)';
+	$args = array($articleID);
+	return executeQuery($query, $args, true);
+}
+
+function getPersonnelInfo($articleID){
+	$query = '
+	SELECT 
+		fullname AS full_name, 
+		gender, 
+		CONCAT(MONTHNAME(birthdate), " ", DAY(birthdate), ", ", YEAR(birthdate)) AS birthday, 
+		description, 
+		height 
+	FROM 
+		personnelv 
+	WHERE 
+		ID = (SELECT personnelID FROM articlev WHERE articleID = ?)';
+	$args = array($articleID);
+	return executeQuery($query, $args, true);
+}
+
 ?>
