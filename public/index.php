@@ -7,8 +7,16 @@
 	$loggedin = isset($_SESSION['uid']) && isset($_SESSION['username']);
 	
 	if($submitted){
+		$filters = array();
+		
 		$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
+		$filters['filter'] = $filter;
+		
 		$searchText = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;
+		$filters['searchText'] = $searchText;
+		
+		$yearFilter = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;)
+	
 	}
 	
 ?>
@@ -32,15 +40,17 @@
 			
 			echo 'Not logged in<br>';
 			echo 'Log in <a href=\'login.php\'>here</a><br>';
-			echo 'Or create an account <a href=\'createAccount.php\'>here</a>';
+			echo 'Or create an account <a href=\'createAccount.php\'>here</a><br>';
 			
 		}
 	
 	?>
 	
-	<h1>Welcome to IMDBc, the most popular IMDB clone</h1>
+	
 	
 	<img src="<? echo IMG_PATH?>imdbc_icon.png">
+	
+	<h1>Welcome to IMDBc, the most popular IMDB clone</h1>
 	
 	<h2>Main page</h2>
 	
@@ -50,7 +60,7 @@
 	
 		Limit search to: 
 		
-		<select name="filter" form="filterForm">
+		<select name="filter" form="filterForm" class="nonblock">
 		
 			<option value="both" <? 
 			echo isset($filter) && $filter == 'both'? 'selected':'';
@@ -65,14 +75,17 @@
 			?>>Films</option>
 			
 		</select><br>
-		
-		Search for: <input type="text" name="searchText" value="<? echo $submitted?$searchText:'' ?>"><br><br>
+		<br>
+		Search for: <input type="text" name="searchText" value="<? echo $submitted?$searchText:'' ?>" class="nonblock"><br>
+		<br>
+		Year: <input type="number" name="yearfilter" min="1850" class="nonblock"><br>
+		<br>
 		
 		<?php 
 	
 		if($submitted){
 			
-			$results = filterDB($searchText, $filter);
+			$results = filterDB($searchText, $filters);
 
 			if($results && count($results) != 0)
 			{

@@ -42,6 +42,12 @@ th {
 
 select, input, label {display: block;}
 
+.nonblock {
+	
+	display: inline;
+	
+}
+
 form.recolor {
 	
 	border: 1px solid white;
