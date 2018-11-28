@@ -10,6 +10,7 @@
 		
 		$articleID = $_GET['articleID'];
 		$article = getArticle($articleID);
+		
 		$isFilm = $article['isFilm'];
 		
 	}
@@ -100,7 +101,9 @@
 
 
 <br>
+<? if($articleSet) { ?>
 Click <a href='edit.php?articleID=<? echo "$articleID"; ?>'>here</a> to edit this article.
+<? } ?>
 </body>
 </html>
 

@@ -10,9 +10,13 @@ CREATE TABLE IF NOT EXISTS edit (
     ID INTEGER NOT NULL auto_increment,
     PRIMARY KEY(ID),
 
-    article_ID INTEGER NOT NULL, --  Which article was edited
+    article_ID INTEGER, --  Which article was edited. May be null which suggests the article doesn't exist yet
     FOREIGN KEY(article_ID) REFERENCES article(ID),
 
+	isFilm BOOLEAN NOT NULL DEFAULT FALSE,
+	newfilmID INT, FOREIGN KEY(newfilmID) REFERENCES film(ID),
+    newpersonnelID INT, FOREIGN KEY(newpersonnelID) REFERENCES personnel(ID),
+	
     time_of_edit DATETIME NOT NULL DEFAULT NOW(), -- The date and time of the edit
     time_of_approval DATETIME DEFAULT NULL, -- The date and time that this edit was approved (may be never)
 

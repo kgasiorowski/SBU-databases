@@ -4,8 +4,5 @@ INSERT INTO edit(article_ID, old_title, new_title, old_body, new_body, userID, a
 ),
 (
     2, 'Test old title', 'Test new title', 'Test old body', 'Test new body', 2, NULL, NULL
-),
-(
-    3, NULL, 'Test new title', NULL, 'Test new body', 2, NULL, NULL
 );
 

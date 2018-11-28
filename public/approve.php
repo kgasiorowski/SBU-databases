@@ -27,13 +27,14 @@
 <body>
 
 <a href="index.php">Back to index</a>
-<br>
-<a href="user.php">Back to your user page</a>
-	
 <?php 
 	
 	approveEdit($editID, $uid);
-
+	
+	echo '<h2>Success</h2>';
+	echo 'Edit successfully approved and applied.<br>';
+	echo 'Click <a href="user.php">here</a> to return to your user page.';
+	
 ?>
 	
 	

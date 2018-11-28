@@ -141,14 +141,18 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 	executeQuery($query, $args);
 }
 
-function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle=null, $oldBody=null){
-	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, userID) values(?, ?, ?, ?, ?, ?)';
+function createEdit($articleID, $userID, $newTitle, $newBody, $oldTitle, $oldBody, $isFilm, $filmID, $personnelID){
+	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, userID, isFilm, newfilmID, newpersonnelID) values(?, ?, ?, ?, ?, ?, ?, ?, ?)';
 	
 	if($oldTitle != null && $oldBody != null)
 		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0)
 			return false;
-		
-	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $userID);
+	
+	if($oldTitle == null && $oldBody == null)
+		if($newTitle == null || $newTitle == '' || $newBody == null || $newBody == '')
+			return false; // The new stuff can't be empty
+	
+	$args = array($articleID, $oldTitle, $newTitle, $oldBody, $newBody, $userID, $isFilm, $filmID, $personnelID);
 	executeQuery($query, $args);
 	return true;
 }
@@ -178,7 +182,23 @@ function getArticle($articleID){
 	
 	// Get all the article data
 	if($articleIsFilm)
-		$query = 'SELECT * FROM articlev INNER JOIN filmv ON articlev.filmID = filmv.ID WHERE articleID = ?';
+		$query = '
+		SELECT 
+			a.*, 
+			f.rating, 
+			f.score, 
+			f.genre, 
+			f.date_released, 
+			f.duration_in_minutes, 
+			f.language, 
+			f.description 
+		FROM 
+			articlev a 
+		INNER JOIN 
+			filmv f ON a.filmID = f.ID 
+		WHERE 
+			a.articleID = ?';
+	
 	else
 		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = ?';
 	
@@ -190,18 +210,24 @@ function getArticle($articleID){
 function getUnapprovedEdits(){
 	global $db;
 	return $db->query($query = '
-	SELECT e1.*, u1.username
-	FROM editv e1
-	INNER JOIN
-	(
-	SELECT MAX(time_of_edit) latest_edit_date, article_ID
-	FROM editv
-	GROUP BY article_ID
-	) e2
-	ON e1.article_ID = e2.article_ID
-	AND e1.time_of_edit = e2.latest_edit_date
-	INNER JOIN userv u1 on u1.ID = e1.userID
-	WHERE time_of_approval IS NULL
+	(SELECT e1.*, u1.username
+        FROM editv e1
+        INNER JOIN
+        (
+        SELECT MAX(time_of_edit) latest_edit_date, article_ID
+        FROM editv
+        GROUP BY article_ID
+        ) e2
+        ON e1.article_ID = e2.article_ID
+        AND e1.time_of_edit = e2.latest_edit_date
+        INNER JOIN userv u1 on u1.ID = e1.userID
+        WHERE time_of_approval IS NULL)
+        UNION
+        (SELECT e.*, u.username
+        FROM editv e
+        INNER JOIN userv u on u.ID = e.userID
+        WHERE e.article_ID IS NULL
+        )
 	')->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -213,9 +239,52 @@ function getEditByID($editID){
 
 function approveEdit($editID, $adminID){
 	$query = 'UPDATE editv SET approved_by_admin_ID = ?, time_of_approval = ? WHERE ID = ?';
-	// UPDATE userv SET firstname = ?, lastname = ?, email = ? WHERE ID = ?
 	$args = array($adminID, date("Y-m-d H:i:s"), $editID);
 	executeQuery($query, $args);
+	
+	$query = 'SELECT * FROM editv WHERE ID = ?';
+	$args = array($editID);
+	$editdata = executeQuery($query, $args, true);
+	
+	pr($editdata);
+	
+	if(isset($editdata['article_ID'])){
+	
+		$query = '
+		UPDATE articlev SET 
+			title = (SELECT new_title FROM editv WHERE ID = ? LIMIT 1),
+			body = (SELECT new_body FROM editv WHERE ID = ? LIMIT 1)
+		WHERE 
+			articleID = (SELECT article_ID FROM editv WHERE ID = ? LIMIT 1)
+		';
+		$args = array($editID, $editID, $editID);
+	
+	}else{
+		
+		$query = 'INSERT INTO article(filmID, personnelID, isFilm, original_author_id, title, body, imageName) VALUES(?, ?, ?, ?, ?, ?, ?)';
+		$args = array($editdata['newfilmID'], $editdata['newpersonnelID'], $editdata['isFilm'], $editdata['userID'], $editdata['new_title'], $editdata['new_body'], '');
+		
+	}
+	executeQuery($query, $args);
+	
+	// Now just update the old edit to set the article_ID
+	if($editdata['isFilm']){
+		
+		$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE filmID = ?) WHERE ID = ?';
+		$args = array($editdata['newfilmID'], $editID);
+		
+	}else{
+		
+		$query = 'UPDATE editv SET article_ID = (SELECT articleID FROM articlev WHERE personnelID = ?) WHERE ID = ?';
+		$args = array($editdata['newpersonnelID'], $editID);
+		
+	}
+	
+	pr($query);
+	pr($args);
+	
+	executeQuery($query, $args);
+	
 }
 
 ?>

@@ -85,7 +85,7 @@
 	
 	}else{
 		
-		echo 'You have created no articles. Ayy lmao';
+		echo 'There are no articles associated with this account.';
 		
 	}
 	
@@ -96,29 +96,34 @@
 		$edits = getUnapprovedEdits();
 		
 		echo '<h3>Latest unapproved edits</h3>';
-		
-		echo '<table id="table_border">';
-					
-		echo '<tr>';
-		echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th><th></th>';
-		echo '</tr>';
 
-		foreach($edits as $row){
+		if(count($edits) == 0){
 			
-			pr($row);
+			echo 'There are no pending edits.';
 			
+		}else{
+		
+			echo '<table id="table_border">';
+						
 			echo '<tr>';
-			echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td>";
-			echo "<td>$row[username]</td>";
-			echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td>"; 
-			echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'], 3, true)."</pre></td>"; 
-			echo "<td><a href='approve.php?editID=".$row['ID']."'>Approve</a></td>";
+			echo '<th> Article ID </th><th> User </th><th> Title diff </th><th> Body diff </th><th></th>';
 			echo '</tr>';
-			
-		}
 
-		echo '</table>';
+			foreach($edits as $row){
+				
+				echo '<tr>';
+				echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td>";
+				echo "<td>$row[username]</td>";
+				echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'], 1, true)."</pre></td>"; 
+				echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'], 3, true)."</pre></td>"; 
+				echo "<td><a href='approve.php?editID=".$row['ID']."'>Approve</a></td>";
+				echo '</tr>';
+				
+			}
+
+			echo '</table>';
 		
+		}
 		
 	}
 	

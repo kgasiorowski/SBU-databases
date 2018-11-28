@@ -9,8 +9,22 @@
 	}
 	
 	$uid = $_SESSION['uid'];
-	$articleID = isset($_GET['articleID'])?$_GET['articleID']:'';
-	$article = getArticle($articleID);
+	$articleID = isset($_GET['articleID']) && $_GET['articleID'] != '' ? $_GET['articleID'] : null;
+	
+	$personnelID = isset($_GET['personnelID']) && $_GET['personnelID']?$_GET['personnelID']:null;
+	$filmID = isset($_GET['filmID']) && $_GET['filmID']?$_GET['filmID']:null;
+	
+	pr($personnelID);
+	pr($filmID);
+	
+	if($articleID != null)
+		$article = getArticle($articleID);
+	else{
+		
+		$article = null;
+		
+	}
+	
 	$submitted = isset($_POST['submit']);
 	$error = false;
 	
@@ -20,7 +34,9 @@
 		$newTitle = $_POST['title'];
 		$newBody = $_POST['body'];
 		
-		$error = !createEdit($articleID, $uid, $newTitle, $newBody, $article['title'], $article['body']);
+		$isFilm = isset($filmID)?1:0;
+		
+		$error = !createEdit($articleID, $uid, $newTitle, $newBody, $article['title'], $article['body'], $isFilm, $filmID, $personnelID);
 	
 	}
 	
@@ -34,13 +50,17 @@
 <a href="index.php">Back to index</a>
 
 	<h1>Edit an article</h1>
-	<form action="edit.php?articleID=<? echo $articleID; ?>" id="editform" method="post">
+	<form action="edit.php?articleID=<? 
+										echo $articleID;
+										echo isset($personnelID)?"&personnelID=$personnelID":'';
+										echo isset($filmID)?"&filmID=$filmID":'';
+															?>" id="editform" method="post">
 	
 		<label for="title">Title:</label>
-		<input type="text" name="title" value="<? echo $article['title'] ?>">
+		<input type="text" name="title" value="<? echo $article!=null?$article['title']:'' ?>">
 		
 		<label for="body">Body:</label>
-		<textarea name="body" form = 'editform' rows='20' cols='100'><? echo $article['body'] ?></textarea>
+		<textarea name="body" form = 'editform' rows='20' cols='100'><? echo $article!=null?$article['body']:'' ?></textarea>
 		<br>
 		<input type='submit' name='submit' value='Update info' <? echo $submitted && !$error?'disabled':''?>/>
 	
@@ -50,7 +70,7 @@
 	
 		if($submitted){
 			if($error){
-				echo 'Edit could not be submitted - you must make some change.';
+				echo 'Edit could not be submitted - there was some error.';
 			}else{
 				echo 'Edit submitted! Please wait until an admin approves it.';
 			}
