@@ -16,7 +16,7 @@ function loggedIn(){
 	return isset($_SESSION['uid']) && isset($_SESSION['username']);
 	
 }
-
+// Basic wrapper function for all dynamic queries
 function executeQuery($query, $argsArray, $singleVal = False, $getIndex = False, $index = ''){
 	global $db;
 
@@ -91,8 +91,6 @@ function verifyLogin($username, $password){
 	
 	$results = executeQuery($query, $args, true);
 	
-	pr($results);
-	
 	if(count($results) != 0){
 		
 		return $results['ID'];
@@ -146,7 +144,7 @@ function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTit
 	
 	if($oldTitle != null && $oldBody != null && $oldImage != null)
 		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0 && strcmp($newImage, $oldImage)==0)
-			return false;
+			return false; // New stuff can't be the same as the old stuff
 	
 	if($oldTitle == null && $oldBody == null && $oldImage == null)
 		if($newTitle == null || $newTitle == '' || $newBody == null || $newBody == '' || $newImage == null || $newImage == '')
@@ -157,7 +155,61 @@ function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTit
 	return true;
 }
 
-function filterDB($searchString, $filter){
+function filterDB($filters){
+	
+	$query = 'SELECT articlev.*, filmv.date_released, personnelv.birthdate FROM articlev LEFT OUTER JOIN filmv ON articlev.filmID = filmv.ID LEFT OUTER JOIN personnelv ON articlev.personnelID = personnelv.ID ';
+	$args = [];
+	
+	$filterStrings = [];
+	
+	if(!empty($filters)){
+	
+		$query .= ' WHERE ';
+	
+		if(isset($filters['searchText'])){
+			
+			$query .= ' (body LIKE ? OR articlev.title LIKE ?) ';
+			array_push($args, '%'.$filters['searchText'].'%', '%'.$filters['searchText'].'%');
+			unset($filters['searchText']);
+			
+			if(count($filters) > 0)
+				$query .= ' AND ';
+			
+		}
+		
+		if(isset($filters['filter'])){
+			
+			if($filters['filter'] == 'personnel'){
+				
+				$query .= ' isFilm = 0 ';
+				
+			}else if($filters['filter'] == 'films'){
+				
+				$query .= ' isFilm = 1 ';
+				
+			}
+			
+			unset($filters['filter']);
+			if(count($filters)>0)
+				$query .= ' AND ';
+			
+		}
+
+		
+		
+		if(isset($filters['yearfilter'])){
+			
+			$query .= ' (YEAR(birthdate) = ? OR YEAR(date_released) = ?) ';
+			array_push($args, $filters['yearfilter'], $filters['yearfilter']);
+			unset($filters['yearfilter']);
+			
+		}
+		
+	}
+		
+	/*
+	$searchString = $filters['searchText'];
+	$filter = $filters['filter'];
 	
 	$str = '%' . $searchString . '%';
 	$args = array($str, $str);
@@ -168,7 +220,8 @@ function filterDB($searchString, $filter){
 	else if($filter == 'films')
 		$query .= 'isFilm = 1 AND ';
 	
-	$query .= '(body LIKE ? OR title LIKE ?);';
+	$query .= '(body LIKE ? OR title LIKE ?)';
+	*/
 	
 	return executeQuery($query, $args);
 	

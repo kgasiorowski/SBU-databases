@@ -9,13 +9,14 @@
 	if($submitted){
 		$filters = array();
 		
-		$filter = isset($_POST['filter']) ? $_POST['filter'] : null;
-		$filters['filter'] = $filter;
+		if(isset($_POST['filter']) && $_POST['filter'] != 'both')
+			$filters['filter'] = $_POST['filter'];
 		
-		$searchText = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;
-		$filters['searchText'] = $searchText;
+		if(isset($_POST['searchText']) && $_POST['searchText'] != '')
+			$filters['searchText'] = $_POST['searchText'];
 		
-		$yearFilter = isset($_POST['searchText']) && $_POST['searchText'] != '' ? $_POST['searchText'] : null;)
+		if(isset($_POST['yearfilter']) && $_POST['yearfilter'] != '')
+			$filters['yearfilter'] = $_POST['yearfilter'];
 	
 	}
 	
@@ -46,8 +47,6 @@
 	
 	?>
 	
-	
-	
 	<img src="<? echo IMG_PATH?>imdbc_icon.png">
 	
 	<h1>Welcome to IMDBc, the most popular IMDB clone</h1>
@@ -63,29 +62,29 @@
 		<select name="filter" form="filterForm" class="nonblock">
 		
 			<option value="both" <? 
-			echo isset($filter) && $filter == 'both'? 'selected':'';
+			echo isset($filters['filter']) && $filters['filter'] == 'both'? 'selected':'';
 			?>>Both</option>
 			
 			<option value="personnel" <? 
-			echo isset($filter) && $filter == 'personnel'? 'selected':'';
+			echo isset($filters['filter']) && $filters['filter'] == 'personnel'? 'selected':'';
 			?>>Personnel</option>
 			
 			<option value="films" <?
-			echo isset($filter) && $filter == 'films'? 'selected':'';
+			echo isset($filters['filter']) && $filters['filter'] == 'films'? 'selected':'';
 			?>>Films</option>
 			
 		</select><br>
 		<br>
-		Search for: <input type="text" name="searchText" value="<? echo $submitted?$searchText:'' ?>" class="nonblock"><br>
+		Search for: <input type="text" name="searchText" value="<? echo $submitted && isset($filters['searchText'])?$filters['searchText']:'' ?>" class="nonblock"><br>
 		<br>
-		Year: <input type="number" name="yearfilter" min="1850" class="nonblock"><br>
+		Year: <input type="number" name="yearfilter" min="1850" class="nonblock" value="<? echo $submitted && isset($filters['yearfilter'])?$filters['yearfilter']:''?>"><br>
 		<br>
 		
 		<?php 
 	
 		if($submitted){
 			
-			$results = filterDB($searchText, $filters);
+			$results = filterDB($filters);
 
 			if($results && count($results) != 0)
 			{
@@ -107,8 +106,7 @@
 				
 			}else{
 				
-				
-				echo 'No results found for search string \''.$searchText.'\'';
+				echo 'No results found for those filters. Try again with different settings.';
 				br();
 				
 			}
