@@ -65,8 +65,10 @@ SELECT
     film.ID as ID,
     film.title,
     rating.rating,
+	film.ratingID,
     film.score,
     genre.genre,
+	film.genreID,
     film.date_released,
     film.duration_in_minutes,
     film.language,
@@ -100,9 +102,13 @@ DROP VIEW IF EXISTS editv;
 CREATE VIEW editv AS
 SELECT * FROM edit;
 
+DROP VIEW IF EXISTS genrev;
+CREATE VIEW genrev AS
+SELECT * FROM genre;
 
-
-
+DROP VIEW IF EXISTS ratingv;
+CREATE VIEW ratingv AS
+SELECT * FROM rating;
 
 
 

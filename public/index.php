@@ -17,6 +17,12 @@
 		if(isset($_POST['yearfilter']) && $_POST['yearfilter'] != '')
 			$filters['yearfilter'] = $_POST['yearfilter'];
 	
+		if(isset($_POST['genrefilter']))
+			if($_POST['genrefilter'] != -1)
+				$filters['genrefilter'] = $_POST['genrefilter'];
+	
+		pr($filters);
+	
 	}
 	
 ?>
@@ -78,7 +84,30 @@
 		<br>
 		Year: <input type="number" name="yearfilter" min="1850" class="nonblock" value="<? echo $submitted && isset($filters['yearfilter'])?$filters['yearfilter']:''?>"><br>
 		<br>
+		Genre:
+		<select name="genrefilter" form="filterForm" method="post" class = 'nonblock'>
 		
+			<?php 
+			
+				$genres = getGenres();
+				
+				echo '<option value = "-1"></option>';
+				
+				foreach($genres as $row){
+					
+					echo '<option value=\''.$row['ID']. '\''; 
+					echo $submitted && isset($filters['genrefilter']) && $filters['genrefilter'] == $row['ID']?'selected':''; 
+					echo '>';
+					echo $row['genre'];
+					echo '</option>'."\n";
+					
+				}
+			
+			?>
+		
+		</select>
+		<br>
+		<br>
 		<?php 
 	
 		if($submitted){
@@ -90,13 +119,13 @@
 				echo '<table id="table_border">';
 				
 				echo '<tr>';
-				echo '<th> Article ID </th><th> Title </th><th> Body </th><th> Author Username </th><th> Author Full Name </th>';
+				echo '<th> Title </th><th> Body </th><th> Author Username </th><th> Author Full Name </th><th> Hotlink </th>';
 				echo '</tr>';
 				
 				foreach($results as $row){
 					
 					echo '<tr>';
-					echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td>";
+					echo "<td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td><td><a href='article.php?articleID=$row[articleID]'>Link</a></td>";
 					echo '</tr>';
 					
 				}

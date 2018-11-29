@@ -157,7 +157,7 @@ function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTit
 
 function filterDB($filters){
 	
-	$query = 'SELECT articlev.*, filmv.date_released, personnelv.birthdate FROM articlev LEFT OUTER JOIN filmv ON articlev.filmID = filmv.ID LEFT OUTER JOIN personnelv ON articlev.personnelID = personnelv.ID ';
+	$query = 'SELECT articlev.*, filmv.date_released, filmv.genreID, personnelv.birthdate FROM articlev LEFT OUTER JOIN filmv ON articlev.filmID = filmv.ID LEFT OUTER JOIN personnelv ON articlev.personnelID = personnelv.ID ';
 	$args = [];
 	
 	$filterStrings = [];
@@ -203,25 +203,21 @@ function filterDB($filters){
 			array_push($args, $filters['yearfilter'], $filters['yearfilter']);
 			unset($filters['yearfilter']);
 			
+			unset($filters['yearfilter']);
+			if(count($filters)>0)
+				$query .= ' AND ';
+			
+		}
+		
+		if(isset($filters['genrefilter'])){
+			
+			$query .= ' (genreID = ?) ';
+			array_push($args, $filters['genrefilter']);
+			unset($filters['genrefilter']);
+			
 		}
 		
 	}
-		
-	/*
-	$searchString = $filters['searchText'];
-	$filter = $filters['filter'];
-	
-	$str = '%' . $searchString . '%';
-	$args = array($str, $str);
-	$query = 'SELECT * FROM articlev WHERE ';
-				
-	if($filter == 'personnel')
-		$query .= 'isFilm = 0 AND ';
-	else if($filter == 'films')
-		$query .= 'isFilm = 1 AND ';
-	
-	$query .= '(body LIKE ? OR title LIKE ?)';
-	*/
 	
 	return executeQuery($query, $args);
 	
@@ -368,6 +364,18 @@ function getPersonnelInfo($articleID){
 		ID = (SELECT personnelID FROM articlev WHERE articleID = ?)';
 	$args = array($articleID);
 	return executeQuery($query, $args, true);
+}
+
+function getGenres(){
+	global $db;
+	$query = 'SELECT * FROM genrev';
+	return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getRatings(){
+	global $db;
+	$query = 'SELECT * FROM ratingv';
+	return $db->query($query)->fetch(PDO::FETCH_ASSOC);
 }
 
 ?>

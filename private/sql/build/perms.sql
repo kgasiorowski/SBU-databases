@@ -9,3 +9,5 @@ GRANT SELECT, INSERT, UPDATE ON imdbc.userv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.personnelv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.editv TO 'imdbc_frontend'@'localhost';
 GRANT SELECT, INSERT, UPDATE ON imdbc.article TO 'imdbc_frontend'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON imdbc.genrev TO 'imdbc_frontend'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON imdbc.ratingv TO 'imdbc_frontend'@'localhost';
