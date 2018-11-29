@@ -12,7 +12,8 @@
 </head>
 <body>
 	
-	<a href="index.php">Click here to go back</a>
+	Click <a href="index.php">here</a> to go back to the index<br>
+	Click <a href="login.php">here</a> to go to login
 	<h1>Create an account</h2>
 
 	<form class='recolor' id='createAccount' action='createAccount.php' method='post'>

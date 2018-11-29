@@ -13,13 +13,13 @@ CREATE TABLE IF NOT EXISTS user(
 
     ID INTEGER NOT NULL auto_increment, PRIMARY KEY(ID),
     
-    username VARCHAR(20) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    username VARCHAR(64) NOT NULL,
+    password VARCHAR(64) NOT NULL,
 
-    firstName VARCHAR(10),
-    lastName VARCHAR(10),
+    firstName VARCHAR(64),
+    lastName VARCHAR(64),
 
-    email VARCHAR(30),
+    email VARCHAR(64),
 
     UNIQUE(username)
     

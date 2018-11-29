@@ -14,9 +14,6 @@
 	$personnelID = isset($_GET['personnelID']) && $_GET['personnelID']?$_GET['personnelID']:null;
 	$filmID = isset($_GET['filmID']) && $_GET['filmID']?$_GET['filmID']:null;
 	
-	pr($personnelID);
-	pr($filmID);
-	
 	if($articleID != null)
 		$article = getArticle($articleID);
 	else{

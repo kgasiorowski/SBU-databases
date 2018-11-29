@@ -1,4 +1,3 @@
-
 <?php 
 
 	require_once("../private/php/init.php"); 
@@ -35,7 +34,7 @@
 	
 			echo 'Logged in as \''.$_SESSION['username'].'\' (<a href=\'login.php?logout\'>logout</a> here)';
 			br();
-			echo 'Click <a href="user.php">here</a> to access your user page.';
+			echo 'Click <a href="user.php">here</a> to access your user page.<br>';
 		
 		}else{
 			
