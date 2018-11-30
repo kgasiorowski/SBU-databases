@@ -20,8 +20,11 @@
 		if(isset($_POST['genrefilter']))
 			if($_POST['genrefilter'] != -1)
 				$filters['genrefilter'] = $_POST['genrefilter'];
-	
-		pr($filters);
+			
+		if(isset($_POST['ratingfilter']))
+			if($_POST['ratingfilter'] != -1)
+				$filters['ratingfilter'] = $_POST['ratingfilter'];
+		
 	
 	}
 	
@@ -106,6 +109,29 @@
 			?>
 		
 		</select>
+		<br><br>
+		Rating:
+		<select name="ratingfilter" form="filterForm" method="post" class = 'nonblock'>
+		
+			<?php 
+			
+				$ratings = getRatings();
+				
+				echo '<option value = "-1"></option>';
+				
+				foreach($ratings as $row){
+					
+					echo '<option value=\''.$row['ID']. '\''; 
+					echo $submitted && isset($filters['ratingfilter']) && $filters['ratingfilter'] == $row['ID']?'selected':''; 
+					echo '>';
+					echo $row['rating'];
+					echo '</option>'."\n";
+					
+				}
+			
+			?>
+		
+		</select>
 		<br>
 		<br>
 		<?php 
@@ -119,13 +145,13 @@
 				echo '<table id="table_border">';
 				
 				echo '<tr>';
-				echo '<th> Title </th><th> Body </th><th> Author Username </th><th> Author Full Name </th><th> Hotlink </th>';
+				echo '<th> Title </th><th> Author Username </th><th> Author Full Name </th>';
 				echo '</tr>';
 				
 				foreach($results as $row){
 					
 					echo '<tr>';
-					echo "<td>$row[title]</td><td>$row[body]</td><td>$row[author]</td><td>$row[fullname]</td><td><a href='article.php?articleID=$row[articleID]'>Link</a></td>";
+					echo "<td><a href='article.php?articleID=$row[articleID]'>$row[title]</a></td><td>$row[author]</td><td>$row[fullname]</td>";
 					echo '</tr>';
 					
 				}

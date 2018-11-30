@@ -201,7 +201,6 @@ function filterDB($filters){
 			
 			$query .= ' (YEAR(birthdate) = ? OR YEAR(date_released) = ?) ';
 			array_push($args, $filters['yearfilter'], $filters['yearfilter']);
-			unset($filters['yearfilter']);
 			
 			unset($filters['yearfilter']);
 			if(count($filters)>0)
@@ -213,7 +212,18 @@ function filterDB($filters){
 			
 			$query .= ' (genreID = ?) ';
 			array_push($args, $filters['genrefilter']);
+			
 			unset($filters['genrefilter']);
+			if(count($filters)>0)
+				$query .= ' AND ';
+			
+		}
+		
+		if(isset($filters['ratingfilter'])){
+			
+			$query .= ' (ratingID = ?) ';
+			array_push($args, $filters['ratingfilter']);
+			unset($filters['ratingfilter']);
 			
 		}
 		
@@ -375,7 +385,7 @@ function getGenres(){
 function getRatings(){
 	global $db;
 	$query = 'SELECT * FROM ratingv';
-	return $db->query($query)->fetch(PDO::FETCH_ASSOC);
+	return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
