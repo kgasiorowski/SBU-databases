@@ -23,13 +23,13 @@
 <body>
 Click <a href="index.php">here</a> to go back to the index.
 <br>
-<h1><?php echo $articleSet?$article['title']:'No Article Found' ?></h1>
+<h1><?php echo $articleSet?h($article['title']):'No Article Found' ?></h1>
 <p>
 
 <?php 
 
 	if($articleSet){ 
-		echo $article['body'];
+		secho($article['body']);
 	}else{
 		
 		$personnelID = isset($_GET['personnelID'])?$_GET['personnelID']:NULL;
@@ -63,10 +63,10 @@ Click <a href="index.php">here</a> to go back to the index.
 		
 				echo '<tr>';
 				echo '<td>';
-				echo "$key";
+				secho($key);
 				echo '</td>';
 				echo '<td>';
-				echo "$row";
+				secho($row);
 				echo '</td>';
 				echo '</tr>';
 			
@@ -87,7 +87,7 @@ Click <a href="index.php">here</a> to go back to the index.
 			foreach($credits as $row){
 				
 				echo '<tr>';
-				echo "<td>$row[name]</td><td>$row[role]</td><td><a href='article.php?articleID=".getArticleByPersonnelID($row['personnelID'])."&personnelID=$row[personnelID]'>Link</a></td>";
+				echo "<td>".h($row['name'])."</td><td>".h($row['role'])."</td><td><a href='article.php?articleID=".getArticleByPersonnelID($row['personnelID'])."&personnelID=$row[personnelID]'>Link</a></td>";
 				echo '</tr>';
 				
 			}
@@ -109,10 +109,10 @@ Click <a href="index.php">here</a> to go back to the index.
 		
 				echo '<tr>';
 				echo '<td>';
-				echo "$key";
+				secho($key);
 				echo '</td>';
 				echo '<td>';
-				echo "$row";
+				secho($row);
 				echo '</td>';
 				echo '</tr>';
 			
@@ -131,7 +131,7 @@ Click <a href="index.php">here</a> to go back to the index.
 			foreach($credits as $row){
 				
 				echo '<tr>';
-				echo "<td>$row[title]</td><td>$row[role]</td><td>$row[genre]</td><td>$row[rating]</td>";
+				echo "<td>".h($row['title'])."</td><td>".h($row['role'])."</td><td>".h($row['genre'])."</td><td>".h($row['rating'])."</td>";
 				echo '<td>';
 				echo "<a href='article.php?articleID=".getArticleByFilmID($row['filmID'])."&filmID=$row[filmID]'>Link</a>";
 				echo '</td>';

@@ -5,6 +5,18 @@ function br(){
 	echo '<br>';
 }
 
+function h($str){
+	
+	return htmlspecialchars($str);
+	
+}
+
+function secho($str){
+	
+	echo h($str);
+	
+}
+
 function pr($arg){
 	echo '<pre>';
 	print_r($arg);
@@ -374,6 +386,12 @@ function getPersonnelInfo($articleID){
 		ID = (SELECT personnelID FROM articlev WHERE articleID = ?)';
 	$args = array($articleID);
 	return executeQuery($query, $args, true);
+}
+
+function getAdminID($uid){
+	$query = 'SELECT adminID FROM adminv WHERE userID = ?';
+	$args = array($uid);
+	return executeQuery($query, $args, true, true, 'adminID');
 }
 
 function getGenres(){

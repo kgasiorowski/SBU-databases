@@ -41,7 +41,7 @@
 	
 		if($loggedin){
 	
-			echo 'Logged in as \''.$_SESSION['username'].'\' (<a href=\'login.php?logout\'>logout</a> here)';
+			echo 'Logged in as \''.h($_SESSION['username']).'\' (<a href=\'login.php?logout\'>logout</a> here)';
 			br();
 			echo 'Click <a href="user.php">here</a> to access your user page.<br>';
 		
@@ -151,7 +151,7 @@
 				foreach($results as $row){
 					
 					echo '<tr>';
-					echo "<td><a href='article.php?articleID=$row[articleID]'>$row[title]</a></td><td>$row[author]</td><td>$row[fullname]</td>";
+					echo "<td><a href='article.php?articleID=$row[articleID]'>".h($row['title'])."</a></td><td>".h($row['author'])."</td><td>".h($row['fullname'])."</td>";
 					echo '</tr>';
 					
 				}

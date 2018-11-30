@@ -32,7 +32,7 @@
 	} 
 
 	if(isset($_POST['submit'])){
-			
+		
 		updateUserInfo($_POST['firstname'], $_POST['lastname'], $_POST['email'], $uid);
 		echo 'Data updated successfully!';br();
 	
@@ -45,13 +45,13 @@
 	<form action="user.php" id="" method="post">
 	
 		<label for="firstname">First name:</label>
-		<input type="text" name="firstname" value="<? echo $user['firstName'] ?>">
+		<input type="text" name="firstname" value="<? secho($user['firstName']) ?>">
 		
 		<label for="lastname">Last name:</label>
-		<input type="text" name="lastname" value="<? echo $user['lastName'] ?>">
+		<input type="text" name="lastname" value="<? secho($user['lastName']) ?>">
 		
 		<label for="email">Email:</label>
-		<input type="text" name="email" value="<? echo $user['email'] ?>">
+		<input type="text" name="email" value="<? secho($user['email']) ?>">
 	
 		<br>
 		<input type='submit' name='submit' value='Update info'/>
@@ -75,7 +75,7 @@
 		foreach($articles as $row){
 			
 			echo '<tr>';
-			echo "<td><a href='article.php?articleID=$row[articleID]'>$row[articleID]</a></td><td>$row[title]</td>";
+			echo "<td><a href='article.php?articleID=$row[articleID]'>".h($row['articleID'])."</a></td><td>".h($row['title'])."</td>";
 			echo '</tr>';
 			
 		}
@@ -114,11 +114,11 @@
 				
 				echo '<tr>';
 				echo "<td><a href='article.php?articleID=$row[article_ID]'>$row[article_ID]</a></td>";
-				echo "<td>$row[username]</td>";
-				echo "<td><pre>".xdiff_string_diff($row['old_title'], $row['new_title'])."</pre></td>"; 
-				echo "<td><pre>".xdiff_string_diff($row['old_body'], $row['new_body'])."</pre></td>";
-				echo "<td><pre>".xdiff_string_diff($row['old_image'], $row['new_image'])."</pre></td>";				
-				echo "<td><a href='approve.php?editID=".$row['ID']."'>Approve</a></td>";
+				echo '<td>'.h($row['username']).'</td>';
+				echo "<td><pre>".h(xdiff_string_diff($row['old_title'], $row['new_title']))."</pre></td>"; 
+				echo "<td><pre>".h(xdiff_string_diff($row['old_body'], $row['new_body']))."</pre></td>";
+				echo "<td><pre>".h(xdiff_string_diff($row['old_image'], $row['new_image']))."</pre></td>";				
+				echo "<td><a href='approve.php?editID=".h($row['ID'])."'>Approve</a></td>";
 				echo '</tr>';
 				
 			}

@@ -29,7 +29,11 @@
 <a href="index.php">Back to index</a>
 <?php 
 	
-	approveEdit($editID, $uid);
+	$aid = getAdminID($uid);
+	
+	pr($aid);
+	
+	approveEdit($editID, $aid);
 	
 	echo '<h2>Success</h2>';
 	echo 'Edit successfully approved and applied.<br>';

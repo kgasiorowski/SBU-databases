@@ -38,6 +38,7 @@ ORDER BY credit.ID;
 DROP VIEW IF EXISTS adminv;
 CREATE VIEW adminv AS
 SELECT
+	admin.ID as adminID,
     userID,
     firstName,
     lastName,
