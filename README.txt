@@ -39,7 +39,8 @@ just reference those tables in the original tables.
 ---- PART 3 ----
 
 Tools used: 
-scotch box (https://box.scotch.io) (A preconfigured VM linux environment that may be used for quick web development)
+
+scotch box (https://box.scotch.io) (A preconfigured VM linux environment that is used for quick local web development)
 MySQL
 PHP+HTML
 
