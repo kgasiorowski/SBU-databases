@@ -58,7 +58,6 @@ function executeQuery($query, $argsArray, $singleVal = False, $getIndex = False,
 		else
 			return $stmt->fetch(PDO::FETCH_ASSOC);
 			
-	
 	}else
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	

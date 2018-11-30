@@ -100,7 +100,7 @@
 		if(count($edits) == 0){
 			
 			echo 'There are no pending edits.';
-			echo '<hr>';
+			
 			
 		}else{
 		
@@ -125,6 +125,50 @@
 
 			echo '</table>';
 		
+		}
+		
+		echo '<hr>';
+		
+		?>
+	
+		<h3>Image Upload Form</h3>
+		
+		<form action='user.php' method='post' enctype='multipart/form-data'>
+		
+			<input type="file" name="fileToUpload" id="fileToUpload"/><br>
+			<input type="submit" value="Upload Picture" name="upload"/>
+		
+		</form>
+		
+		<?
+		
+		if(isset($_POST['upload'])){
+		
+			$target_dir = IMG_PATH;
+			$target_file = $target_dir . basename($_FILES['fileToUpload']['name']);
+			$uploadOk = true;
+			$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+			
+			if($_FILES['fileToUpload']['size'] > 2000000)
+			{
+				
+				echo 'Error: file too large';
+				$uploadOk = false;
+				
+			}	
+		
+			if (file_exists($target_file)) {
+				echo "Error: that file already exists";
+				$uploadOk = false;
+			}
+				
+			if($uploadOk){
+				
+				move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $target_file);
+				echo 'Upload successful!';
+				
+			}
+			
 		}
 		
 	}
