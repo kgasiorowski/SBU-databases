@@ -124,15 +124,19 @@ function userIsAdmin($userID){
 function createUser($username, $password){
 	global $db;
 	
+	$db->beginTransaction();
+	
 	$query = 'SELECT COUNT(*) as userExists FROM userv WHERE username = \''.$username.'\';';
 	$result = $db->query($query)->fetch(PDO::FETCH_ASSOC)['userExists'];
 	
 	if($result){
+		$db->rollBack();
 		return False;
 	}else{
 		// Try to insert the new user
 		$query = 'INSERT INTO userv(username, password) VALUES (?, ?);';
 		$result = $db->prepare($query)->execute([$username, $password]);
+		$db->commit();
 		return True;
 	}
 	
@@ -151,7 +155,8 @@ function updateUserInfo($firstname, $lastname, $email, $id){
 }
 
 function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTitle, $oldBody, $oldImage, $isFilm, $filmID, $personnelID){
-	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, old_image, new_image, userID, isFilm, newfilmID, newpersonnelID) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+	$query = 'INSERT INTO editv(article_ID, old_title, new_title, old_body, new_body, old_image, new_image, userID, isFilm, newfilmID, newpersonnelID) 
+values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 	
 	if($oldTitle != null && $oldBody != null && $oldImage != null)
 		if(strcmp($newTitle, $oldTitle) == 0 && strcmp($newBody, $oldBody) == 0 && strcmp($newImage, $oldImage)==0)
@@ -168,10 +173,22 @@ function createEdit($articleID, $userID, $newTitle, $newBody, $newImage, $oldTit
 
 function filterDB($filters){
 	
-	$query = 'SELECT articlev.*, filmv.date_released, filmv.genreID, personnelv.birthdate FROM articlev LEFT OUTER JOIN filmv ON articlev.filmID = filmv.ID LEFT OUTER JOIN personnelv ON articlev.personnelID = personnelv.ID ';
+	$query = 'SELECT 
+				articlev.*, 
+				filmv.date_released, 
+				filmv.genreID, 
+				personnelv.birthdate 
+			FROM 
+				articlev 
+			LEFT OUTER JOIN 
+				filmv 
+			ON 
+				articlev.filmID = filmv.ID 
+			LEFT OUTER JOIN 
+				personnelv 
+			ON 
+				articlev.personnelID = personnelv.ID ';
 	$args = [];
-	
-	$filterStrings = [];
 	
 	if(!empty($filters)){
 	
@@ -205,8 +222,6 @@ function filterDB($filters){
 				$query .= ' AND ';
 			
 		}
-
-		
 		
 		if(isset($filters['yearfilter'])){
 			
@@ -239,12 +254,15 @@ function filterDB($filters){
 		}
 		
 	}
-	
 	return executeQuery($query, $args);
 	
 }
 
 function getArticle($articleID){
+	global $db;
+	
+	$db->beginTransaction();
+	
 	// First we find if the article referenced by articleID is a film
 	$query = 'SELECT * FROM articlev WHERE articleID=?';
 	$args = array($articleID);
@@ -270,9 +288,15 @@ function getArticle($articleID){
 			a.articleID = ?';
 	
 	else
-		$query = 'SELECT * FROM articlev INNER JOIN personnelv ON articlev.personnelID = personnelv.ID WHERE articleID = ?';
+		$query = 'SELECT * FROM articlev 
+				INNER JOIN personnelv ON articlev.personnelID = personnelv.ID 
+				WHERE articleID = ?';
 	
-	return executeQuery($query, $args, true);
+	$returnVal = executeQuery($query, $args, true);
+	
+	$db->commit();
+	
+	return $returnVal;
 	
 }
 
@@ -308,6 +332,10 @@ function getEditByID($editID){
 }
 
 function approveEdit($editID, $adminID){
+	global $db;
+	
+	$db->beginTransaction();
+	
 	$query = 'UPDATE editv SET approved_by_admin_ID = ?, time_of_approval = ? WHERE ID = ?';
 	$args = array($adminID, date("Y-m-d H:i:s"), $editID);
 	executeQuery($query, $args);
@@ -351,6 +379,8 @@ function approveEdit($editID, $adminID){
 		}
 	}
 	executeQuery($query, $args);
+	
+	$db->commit();
 	
 }
 

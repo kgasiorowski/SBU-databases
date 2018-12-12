@@ -31,8 +31,6 @@
 	
 	$aid = getAdminID($uid);
 	
-	pr($aid);
-	
 	approveEdit($editID, $aid);
 	
 	echo '<h2>Success</h2>';

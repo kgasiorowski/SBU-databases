@@ -101,7 +101,6 @@
 			
 			echo 'There are no pending edits.';
 			
-			
 		}else{
 		
 			echo '<table id="table_border">';
@@ -149,12 +148,9 @@
 			$uploadOk = true;
 			$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 			
-			if($_FILES['fileToUpload']['size'] > 2000000)
-			{
-				
+			if($_FILES['fileToUpload']['size'] > 2000000){
 				echo 'Error: file too large';
 				$uploadOk = false;
-				
 			}	
 		
 			if (file_exists($target_file)) {

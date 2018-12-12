@@ -59,8 +59,6 @@
 	
 	<h1>Welcome to IMDBc, the most popular IMDB clone</h1>
 	
-	<h2>Main page</h2>
-	
 	<h3>Filter the database:</h3>
 	
 	<form action="index.php" id="filterForm" method="post">
